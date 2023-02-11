@@ -66,4 +66,16 @@ class OpenIARepository {
       throw Exception(e.toString());
     }
   }
+
+  Future<Map<String, dynamic>> getRawModelsList() async {
+    try {
+      if (_apiKey.isEmpty) {
+        throw KeyNotFoundException();
+      }
+      final response = await service.getModelsLis(apiKey: _apiKey);
+      return response.toMap();
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
 }
