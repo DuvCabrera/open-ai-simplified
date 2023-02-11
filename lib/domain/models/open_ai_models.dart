@@ -15,7 +15,7 @@ class OpenAiModels {
   factory OpenAiModels.fromMap(Map<String, dynamic> map) {
     return OpenAiModels(
       List<Data>.from(
-        (map['data'] as List<int>).map<Data>(
+        (map['data'] as List<dynamic>).map<Data>(
           (x) => Data.fromMap(x as Map<String, dynamic>),
         ),
       ),
@@ -29,28 +29,28 @@ class OpenAiModels {
 }
 
 class Data {
-  final String id;
-  final String objec;
-  final String ownedBy;
+  final String? id;
+  final String? objec;
+  final String? ownedBy;
   Data({
-    required this.id,
-    required this.objec,
-    required this.ownedBy,
+    this.id,
+    this.objec,
+    this.ownedBy,
   });
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
       'objec': objec,
-      'owned_by': ownedBy,
+      'ownedBy': ownedBy,
     };
   }
 
   factory Data.fromMap(Map<String, dynamic> map) {
     return Data(
-      id: map['id'] as String,
-      objec: map['objec'] as String,
-      ownedBy: map['owned_by'] as String,
+      id: map['id'] != null ? map['id'] as String : null,
+      objec: map['objec'] != null ? map['objec'] as String : null,
+      ownedBy: map['ownedBy'] != null ? map['ownedBy'] as String : null,
     );
   }
 

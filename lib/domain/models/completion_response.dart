@@ -37,7 +37,7 @@ class CompletionResponse {
       created: map['created'] as int,
       model: map['model'] as String,
       choices: List<Choices>.from(
-        (map['choices'] as List<int>).map<Choices>(
+        (map['choices'] as List<dynamic>).map<Choices>(
           (x) => Choices.fromMap(x as Map<String, dynamic>),
         ),
       ),

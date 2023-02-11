@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:open_ai_simplified/data/remote/open_ia_service.dart';
 import 'package:open_ai_simplified/domain/exceptions.dart';
 import 'package:open_ai_simplified/domain/models/completion_response.dart';
@@ -6,14 +7,15 @@ import 'package:open_ai_simplified/domain/models/config_edits.dart';
 import 'package:open_ai_simplified/domain/models/edits_response.dart';
 
 class OpenIARepository {
+  OpenIARepository({
+    OpenIAService? service,
+  }) : _service = service ?? OpenIAService(Dio());
+
   ConfigCompletion _configCompletion = ConfigCompletion();
   String _apiKey = '';
   ConfigEdits _configEdits = ConfigEdits();
-
-  final OpenIAService service;
-  OpenIARepository({
-    required this.service,
-  });
+  OpenIAService get service => _service;
+  final OpenIAService _service;
 
   void addApiKey(String apiKey) {
     _apiKey = apiKey;
@@ -69,13 +71,12 @@ class OpenIARepository {
 
   void configEditsFromConfig({
     required ConfigEdits config,
-    required bool isText,
   }) {
     if (config.n != null && config.n! < 1) {
       throw InvalidParamsException(message: 'the n param is lower than 1');
     }
     if (config.temperature != null &&
-        (config.temperature! < 0 || config.temperature! < 2)) {
+        (config.temperature! < 0 || config.temperature! > 2)) {
       throw InvalidParamsException(
           message: 'the temperature param is lower than 0 or higher than 2');
     }
@@ -83,7 +84,7 @@ class OpenIARepository {
       throw InvalidParamsException(message: 'the n param is lower than 0');
     }
     _configEdits = _configEdits.copyWith(
-      isText: isText,
+      isText: config.isText,
       n: config.n,
       temperature: config.temperature,
       topP: config.topP,
