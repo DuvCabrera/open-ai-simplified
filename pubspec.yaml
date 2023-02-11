@@ -1,7 +1,7 @@
 name: open_ai_simplified
 description: Package for use openAI API.
 version: 0.0.1
-homepage: "s"
+homepage: "https://github.com/DuvCabrera/open-ai-simplified"
 
 environment:
   sdk: '>=2.19.0 <3.0.0'

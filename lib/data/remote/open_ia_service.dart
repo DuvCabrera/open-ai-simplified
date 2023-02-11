@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:open_ai_simplified/data/infraestructure/url_builder.dart';
 import 'package:open_ai_simplified/domain/models/completion_response.dart';
+import 'package:open_ai_simplified/domain/models/edits_response.dart';
 import 'package:open_ai_simplified/domain/models/models.dart';
 
 class OpenIAService {
@@ -11,7 +12,7 @@ class OpenIAService {
   Future<CompletionResponse> getCompletion({
     required String prompt,
     required String apiKey,
-    required Config config,
+    required ConfigCompletion config,
   }) async {
     try {
       final map = config.toMap();
@@ -38,6 +39,25 @@ class OpenIAService {
       return OpenAiModels.fromJson(response.data);
     } catch (e) {
       throw Exception(e.toString());
+    }
+  }
+
+  Future<EditsResponse> getEdits(
+      {required String apiKey,
+      required ConfigEdits config,
+      required Map<String, dynamic> inputWithInstruction}) async {
+    try {
+      final map = config.toMap();
+      map.addAll(inputWithInstruction);
+      final response = await dio.post(UrlBuilder.completionsPath,
+          data: map,
+          options: Options(headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $apiKey'
+          }));
+      return EditsResponse.fromJson(response.data);
+    } catch (e) {
+      throw Exception(e);
     }
   }
 }
