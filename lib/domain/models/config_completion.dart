@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-class Config {
+class ConfigCompletion {
   final String? model;
   final int? maxTokens;
   final double? temperature;
@@ -11,7 +11,7 @@ class Config {
   final int? logprobs;
   final String? stop;
 
-  Config(
+  ConfigCompletion(
       {this.model = "text-davinci-003",
       this.maxTokens = 256,
       this.temperature = 0.6,
@@ -21,7 +21,7 @@ class Config {
       this.logprobs,
       this.stop = "\n"});
 
-  Config copyWith({
+  ConfigCompletion copyWith({
     String? model,
     int? maxTokens,
     double? temperature,
@@ -31,7 +31,7 @@ class Config {
     int? logprobs,
     String? stop,
   }) {
-    return Config(
+    return ConfigCompletion(
       model: model ?? this.model,
       maxTokens: maxTokens ?? this.maxTokens,
       temperature: temperature ?? this.temperature,
@@ -56,8 +56,8 @@ class Config {
     };
   }
 
-  factory Config.fromMap(Map<String, dynamic> map) {
-    return Config(
+  factory ConfigCompletion.fromMap(Map<String, dynamic> map) {
+    return ConfigCompletion(
       model: map['model'] != null ? map['model'] as String : null,
       maxTokens: map['max_tokens'] != null ? map['max_tokens'] as int : null,
       temperature:
@@ -72,6 +72,6 @@ class Config {
 
   String toJson() => json.encode(toMap());
 
-  factory Config.fromJson(String source) =>
-      Config.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory ConfigCompletion.fromJson(String source) =>
+      ConfigCompletion.fromMap(json.decode(source) as Map<String, dynamic>);
 }
