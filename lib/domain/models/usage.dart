@@ -1,29 +1,34 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 class Usage {
-  final int promptTokens;
-  final int completionTokens;
-  final int totalTokens;
+  final int? promptTokens;
+  final int? completionTokens;
+  final int? totalTokens;
 
   Usage({
-    required this.promptTokens,
-    required this.completionTokens,
-    required this.totalTokens,
+    this.promptTokens,
+    this.completionTokens,
+    this.totalTokens,
   });
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'prompt_tokens': promptTokens,
-      'completion_tokens': completionTokens,
-      'total_tokens': totalTokens,
+      'promptTokens': promptTokens,
+      'completionTokens': completionTokens,
+      'totalTokens': totalTokens,
     };
   }
 
   factory Usage.fromMap(Map<String, dynamic> map) {
     return Usage(
-      promptTokens: map['prompt_tokens'] as int,
-      completionTokens: map['completion_tokens'] as int,
-      totalTokens: map['total_tokens'] as int,
+      promptTokens:
+          map['promptTokens'] != null ? map['promptTokens'] as int : null,
+      completionTokens: map['completionTokens'] != null
+          ? map['completionTokens'] as int
+          : null,
+      totalTokens:
+          map['totalTokens'] != null ? map['totalTokens'] as int : null,
     );
   }
 

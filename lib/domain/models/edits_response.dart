@@ -25,7 +25,7 @@ class EditsResponse {
       map['object'] as String,
       map['created'] as int,
       List<ChoicesEdit>.from(
-        (map['choices'] as List<int>).map<ChoicesEdit>(
+        (map['choices'] as List<dynamic>).map<ChoicesEdit>(
           (x) => ChoicesEdit.fromMap(x as Map<String, dynamic>),
         ),
       ),

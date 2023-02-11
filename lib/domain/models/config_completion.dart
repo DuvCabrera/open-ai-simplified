@@ -13,13 +13,13 @@ class ConfigCompletion {
 
   ConfigCompletion(
       {this.model = "text-davinci-003",
-      this.maxTokens = 256,
-      this.temperature = 0.6,
+      this.maxTokens = 150,
+      this.temperature = 0.9,
       this.topP = 1,
       this.n = 1,
       this.stream = false,
       this.logprobs,
-      this.stop = "\n"});
+      this.stop = ""});
 
   ConfigCompletion copyWith({
     String? model,
