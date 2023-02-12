@@ -1,8 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:open_ai_simplified/data/infraestructure/url_builder.dart';
-import 'package:open_ai_simplified/domain/models/completion_response.dart';
-
-import '../../domain/models/config_ia.dart';
+import 'package:open_ai_simplified/domain/models/models.dart';
 
 class OpenIAService {
   final Dio dio;
@@ -12,7 +10,7 @@ class OpenIAService {
   Future<CompletionResponse> getCompletion({
     required String prompt,
     required String apiKey,
-    required Config config,
+    required ConfigCompletion config,
   }) async {
     try {
       final map = config.toMap();
@@ -24,9 +22,40 @@ class OpenIAService {
             'Authorization': 'Bearer $apiKey'
           }));
 
-      return CompletionResponse.fromJson(response.data);
+      return CompletionResponse.fromMap(response.data);
     } catch (e) {
       throw Exception(e.toString());
+    }
+  }
+
+  Future<OpenAiModels> getModelsList({
+    required String apiKey,
+  }) async {
+    try {
+      final response = await dio.get(UrlBuilder.modelsPath,
+          options: Options(headers: {'Authorization': 'Bearer $apiKey'}));
+      return OpenAiModels.fromMap(response.data);
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<EditsResponse> getEdits(
+      {required String apiKey,
+      required ConfigEdits config,
+      required Map<String, dynamic> inputWithInstruction}) async {
+    try {
+      final map = config.toMap();
+      map.addAll(inputWithInstruction);
+      final response = await dio.post(UrlBuilder.editsPath,
+          data: map,
+          options: Options(headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $apiKey'
+          }));
+      return EditsResponse.fromMap(response.data);
+    } catch (e) {
+      throw Exception(e);
     }
   }
 }
