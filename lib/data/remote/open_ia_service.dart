@@ -28,7 +28,7 @@ class OpenIAService {
     }
   }
 
-  Future<OpenAiModels> getModelsLis({
+  Future<OpenAiModels> getModelsList({
     required String apiKey,
   }) async {
     try {

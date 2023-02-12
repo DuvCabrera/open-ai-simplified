@@ -1,10 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:open_ai_simplified/data/remote/open_ia_service.dart';
 import 'package:open_ai_simplified/domain/exceptions.dart';
-import 'package:open_ai_simplified/domain/models/completion_response.dart';
-import 'package:open_ai_simplified/domain/models/config_completion.dart';
-import 'package:open_ai_simplified/domain/models/config_edits.dart';
-import 'package:open_ai_simplified/domain/models/edits_response.dart';
+import 'package:open_ai_simplified/domain/models/models.dart';
 
 class OpenIARepository {
   OpenIARepository({
@@ -23,14 +20,14 @@ class OpenIARepository {
 
   void configCompletionFromMap(Map<String, dynamic> newConfig) {
     _configCompletion = _configCompletion.copyWith(
-        maxTokens: newConfig['max_token'],
-        model: newConfig['model'],
-        temperature: newConfig['temperature'],
-        topP: newConfig['top_p'],
-        n: newConfig['n'],
-        stream: newConfig['stream'],
-        logprobs: newConfig['logprobs'],
-        stop: newConfig['stop']);
+        maxTokens: newConfig['max_token'] ?? _configCompletion.maxTokens,
+        model: newConfig['model'] ?? _configCompletion.model,
+        temperature: newConfig['temperature'] ?? _configCompletion.temperature,
+        topP: newConfig['top_p'] ?? _configCompletion.topP,
+        n: newConfig['n'] ?? _configCompletion.n,
+        stream: newConfig['stream'] ?? _configCompletion.stream,
+        logprobs: newConfig['logprobs'] ?? _configCompletion.logprobs,
+        stop: newConfig['stop'] ?? _configCompletion);
   }
 
   void configCompletionFromConfig(ConfigCompletion config) {
@@ -63,9 +60,9 @@ class OpenIARepository {
     }
     _configEdits = _configEdits.copyWith(
       isText: isText,
-      n: newConfig['n'],
-      temperature: newConfig['temperature'],
-      topP: newConfig['top_p'],
+      n: newConfig['n'] ?? _configEdits.n,
+      temperature: newConfig['temperature'] ?? _configEdits.temperature,
+      topP: newConfig['top_p'] ?? _configEdits.topP,
     );
   }
 
@@ -94,7 +91,7 @@ class OpenIARepository {
   Future<Map<String, dynamic>> getRawCompletion(String prompt) async {
     try {
       if (_apiKey.isEmpty) {
-        throw Exception();
+        throw KeyNotFoundException();
       }
       final response = await service.getCompletion(
           prompt: prompt, apiKey: _apiKey, config: _configCompletion);
@@ -122,8 +119,20 @@ class OpenIARepository {
       if (_apiKey.isEmpty) {
         throw KeyNotFoundException();
       }
-      final response = await service.getModelsLis(apiKey: _apiKey);
+      final response = await service.getModelsList(apiKey: _apiKey);
       return response.toMap();
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<OpenAiModels> getModelsList() async {
+    try {
+      if (_apiKey.isEmpty) {
+        throw KeyNotFoundException();
+      }
+      final response = await service.getModelsList(apiKey: _apiKey);
+      return response;
     } catch (e) {
       throw Exception(e.toString());
     }
