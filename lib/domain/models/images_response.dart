@@ -1,5 +1,7 @@
 class ImagesResponse {
+  // Date of when the object is created
   final int created;
+  // Information of the image requested
   final Data data;
   ImagesResponse({
     required this.created,
@@ -24,6 +26,7 @@ class ImagesResponse {
 }
 
 class Data {
+  // url with the image requested
   final String url;
 
   Data(this.url);
