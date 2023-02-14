@@ -10,7 +10,6 @@ class ConfigImages {
 
   // Generate a new ConfigImages object from the original object
   ConfigImages copyWith({
-    String? prompt,
     int? n,
     String? size,
   }) {

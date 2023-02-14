@@ -37,6 +37,28 @@ class OpenIARepository {
     _apiKey = apiKey;
   }
 
+  // configure the images service from a map
+  void configImagesFromMap(Map<String, dynamic> newConfig) {
+    if (newConfig['n'] != null && (newConfig['n'] < 1 || newConfig['n'] > 10)) {
+      throw InvalidParamsException(message: 'the n param is lower than 1');
+    }
+    _configImages = _configImages.copyWith(
+      n: newConfig['n'] ?? _configImages.n,
+      size: newConfig['size'] ?? _configImages.size,
+    );
+  }
+
+  // configure the images service from a ConfigImages object
+  void configImagesFromConfig(ConfigImages newConfig) {
+    if (newConfig.n < 1 || newConfig.n > 10) {
+      throw InvalidParamsException(message: 'the n param is lower than 1');
+    }
+    _configImages = _configImages.copyWith(
+      n: newConfig.n,
+      size: newConfig.size,
+    );
+  }
+
   // configure the completion service from a map
   void configCompletionFromMap(Map<String, dynamic> newConfig) {
     _configCompletion = _configCompletion.copyWith(
