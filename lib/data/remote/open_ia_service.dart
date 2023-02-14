@@ -1,12 +1,14 @@
 import 'package:dio/dio.dart';
 import 'package:open_ai_simplified/data/infraestructure/url_builder.dart';
+import 'package:open_ai_simplified/domain/models/config_images.dart';
+import 'package:open_ai_simplified/domain/models/images_response.dart';
 import 'package:open_ai_simplified/domain/models/models.dart';
 
 class OpenIAService {
   final Dio dio;
 
   OpenIAService(this.dio);
-
+  // Generate and delivery a Completion via post
   Future<CompletionResponse> getCompletion({
     required String prompt,
     required String apiKey,
@@ -28,6 +30,7 @@ class OpenIAService {
     }
   }
 
+  // Get the models availables to use on the configs via get
   Future<OpenAiModels> getModelsList({
     required String apiKey,
   }) async {
@@ -40,6 +43,7 @@ class OpenIAService {
     }
   }
 
+  // Generate and delivery a Edits via post
   Future<EditsResponse> getEdits(
       {required String apiKey,
       required ConfigEdits config,
@@ -57,5 +61,22 @@ class OpenIAService {
     } catch (e) {
       throw Exception(e);
     }
+  }
+
+  // Generate and delivery Images via post
+  Future<ImagesResponse> generateImages(
+      {required String apiKey,
+      required ConfigImages config,
+      required Map<String, dynamic> prompt}) async {
+    final map = config.toMap();
+    map.addAll(prompt);
+    final response = await dio.post(UrlBuilder.imagesGenerationsPath,
+        data: map,
+        options: Options(headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $apiKey'
+        }));
+
+    return ImagesResponse.fromMap(response.data);
   }
 }

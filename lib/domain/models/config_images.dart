@@ -1,11 +1,14 @@
 class ConfigImages {
+  // number of images will be delivery 1 to 10
   final int n;
+  // Size of the images generated ex: 1024x1024
   final String size;
   ConfigImages({
     this.n = 2,
     this.size = "1024x1024",
   });
 
+  // Generate a new ConfigImages object from the original object
   ConfigImages copyWith({
     String? prompt,
     int? n,
@@ -17,6 +20,7 @@ class ConfigImages {
     );
   }
 
+  // convert the response to a Map<String, dynamic>
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'n': n,
@@ -24,6 +28,7 @@ class ConfigImages {
     };
   }
 
+  // convert a Map<String, dynamic> into ImagesResponse
   factory ConfigImages.fromMap(Map<String, dynamic> map) {
     return ConfigImages(
       n: map['n'] as int,

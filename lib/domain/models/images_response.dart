@@ -6,6 +6,7 @@ class ImagesResponse {
     required this.data,
   });
 
+  // convert the response to a Map<String, dynamic>
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'created': created,
@@ -13,6 +14,7 @@ class ImagesResponse {
     };
   }
 
+  // convert a Map<String, dynamic> into ImagesResponse
   factory ImagesResponse.fromMap(Map<String, dynamic> map) {
     return ImagesResponse(
       created: map['created'] as int,
@@ -26,12 +28,14 @@ class Data {
 
   Data(this.url);
 
+  // convert the response to a Map<String, dynamic>
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'url': url,
     };
   }
 
+  // convert a Map<String, dynamic> into Data
   factory Data.fromMap(Map<String, dynamic> map) {
     return Data(
       map['url'] as String,

@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:open_ai_simplified/data/remote/open_ia_service.dart';
 import 'package:open_ai_simplified/domain/exceptions.dart';
+import 'package:open_ai_simplified/domain/models/config_images.dart';
+import 'package:open_ai_simplified/domain/models/images_response.dart';
 import 'package:open_ai_simplified/domain/models/models.dart';
 
 class OpenIARepository {
@@ -8,16 +10,34 @@ class OpenIARepository {
     OpenIAService? service,
   }) : _service = service ?? OpenIAService(Dio());
 
-  ConfigCompletion _configCompletion = ConfigCompletion();
+  // private that contains the apiKey of the user need to be initialized via addApiKey method
   String _apiKey = '';
+
+  // contains a configCompletion object that have the information necessary to configure the
+  // service of getting completions, default values are setted but you can change it with
+  // the method configCompletionFromMap or configCompletionFromConfig
+  ConfigCompletion _configCompletion = ConfigCompletion();
+
+  // contains a ConfigEdits object that have the information necessary to configure the
+  // service of getting edits, default values are setted but you can change it with
+  // the method configEditsFromMap or configEditsFromConfig
   ConfigEdits _configEdits = ConfigEdits();
+
+  // contains a ConfigImages object that have the information necessary to configure the
+  // service of getting images, default values are setted but you can change it with
+  // the method configImagesFromMap or configImagesFromConfig
+  ConfigImages _configImages = ConfigImages();
+
+  // this is the service that makes tha API calls
   OpenIAService get service => _service;
   final OpenIAService _service;
 
+  // Add an APIKey to the package
   void addApiKey(String apiKey) {
     _apiKey = apiKey;
   }
 
+  // configure the completion service from a map
   void configCompletionFromMap(Map<String, dynamic> newConfig) {
     _configCompletion = _configCompletion.copyWith(
         maxTokens: newConfig['max_token'] ?? _configCompletion.maxTokens,
@@ -30,6 +50,7 @@ class OpenIARepository {
         stop: newConfig['stop'] ?? _configCompletion);
   }
 
+  // configure the completion service from a ConfigCompletion object
   void configCompletionFromConfig(ConfigCompletion config) {
     _configCompletion = _configCompletion.copyWith(
       maxTokens: config.maxTokens,
@@ -43,6 +64,7 @@ class OpenIARepository {
     );
   }
 
+  // configure the edits service from a map
   void configEditsFromMap({
     required Map<String, dynamic> newConfig,
     required bool isText,
@@ -66,6 +88,7 @@ class OpenIARepository {
     );
   }
 
+  // configure the edits service from a ConfigEdits object
   void configEditsFromConfig({
     required ConfigEdits config,
   }) {
@@ -88,10 +111,14 @@ class OpenIARepository {
     );
   }
 
+  // get a Completion as Map<String, dynamic>
   Future<Map<String, dynamic>> getRawCompletion(String prompt) async {
     try {
       if (_apiKey.isEmpty) {
         throw KeyNotFoundException();
+      }
+      if (prompt.isEmpty) {
+        throw InvalidParamsException();
       }
       final response = await service.getCompletion(
           prompt: prompt, apiKey: _apiKey, config: _configCompletion);
@@ -101,10 +128,14 @@ class OpenIARepository {
     }
   }
 
+  // get a completion as CompletionResponse object
   Future<CompletionResponse> getCompletion(String prompt) async {
     try {
       if (_apiKey.isEmpty) {
         throw KeyNotFoundException();
+      }
+      if (prompt.isEmpty) {
+        throw InvalidParamsException();
       }
       final response = await service.getCompletion(
           prompt: prompt, apiKey: _apiKey, config: _configCompletion);
@@ -114,6 +145,7 @@ class OpenIARepository {
     }
   }
 
+  // get a Models as Map<String, dynamic>
   Future<Map<String, dynamic>> getRawModelsList() async {
     try {
       if (_apiKey.isEmpty) {
@@ -126,6 +158,7 @@ class OpenIARepository {
     }
   }
 
+  // get the Models as OpenAiModels object
   Future<OpenAiModels> getModelsList() async {
     try {
       if (_apiKey.isEmpty) {
@@ -138,6 +171,7 @@ class OpenIARepository {
     }
   }
 
+  // get a Edit as Map<String, dynamic>
   Future<Map<String, dynamic>> getRawEdits(
       {required String input, required String instruction}) async {
     try {
@@ -156,6 +190,7 @@ class OpenIARepository {
     }
   }
 
+  // get a Edit as EditsResponse object
   Future<EditsResponse> getEdits(
       {required String input, required String instruction}) async {
     try {
@@ -171,6 +206,48 @@ class OpenIARepository {
       return response;
     } catch (e) {
       rethrow;
+    }
+  }
+
+  // get Images as Map<String, dynamic>
+  Future<Map<String, dynamic>> getRawImages(String prompt) async {
+    try {
+      if (_apiKey.isEmpty) {
+        throw KeyNotFoundException();
+      }
+      if (prompt.isEmpty) {
+        throw InvalidParamsException();
+      }
+      final map = {'prompt': prompt};
+      final result = await service.generateImages(
+          apiKey: _apiKey, config: _configImages, prompt: map);
+      return result.toMap();
+    } catch (e) {
+      if (e is OpenAIException) {
+        rethrow;
+      }
+      throw Exception(e.toString());
+    }
+  }
+
+  // get Images as ImagesResponse object
+  Future<ImagesResponse> getImages(String prompt) async {
+    try {
+      if (_apiKey.isEmpty) {
+        throw KeyNotFoundException();
+      }
+      if (prompt.isEmpty) {
+        throw InvalidParamsException();
+      }
+      final map = {'prompt': prompt};
+      final result = await service.generateImages(
+          apiKey: _apiKey, config: _configImages, prompt: map);
+      return result;
+    } catch (e) {
+      if (e is OpenAIException) {
+        rethrow;
+      }
+      throw Exception(e.toString());
     }
   }
 }

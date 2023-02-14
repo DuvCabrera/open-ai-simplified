@@ -1,5 +1,5 @@
 name: open_ai_simplified
-description: Package for use openAI API.
+description: OpenAI Simplified is an application that aims to provide easy and intuitive access to OpenAI services. 
 version: 0.0.2
 homepage: "https://github.com/DuvCabrera/open-ai-simplified"
 
