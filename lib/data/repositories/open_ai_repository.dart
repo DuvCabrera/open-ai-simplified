@@ -146,7 +146,11 @@ class OpenIARepository {
           prompt: prompt, apiKey: _apiKey, config: _configCompletion);
       return response.toMap();
     } catch (e) {
-      throw Exception(e.toString());
+      if (e is OpenAIException) {
+        rethrow;
+      } else {
+        throw Exception(e.toString());
+      }
     }
   }
 
@@ -163,7 +167,11 @@ class OpenIARepository {
           prompt: prompt, apiKey: _apiKey, config: _configCompletion);
       return response;
     } catch (e) {
-      throw Exception(e.toString());
+      if (e is OpenAIException) {
+        rethrow;
+      } else {
+        throw Exception(e.toString());
+      }
     }
   }
 
@@ -176,7 +184,11 @@ class OpenIARepository {
       final response = await service.getModelsList(apiKey: _apiKey);
       return response.toMap();
     } catch (e) {
-      throw Exception(e.toString());
+      if (e is OpenAIException) {
+        rethrow;
+      } else {
+        throw Exception(e.toString());
+      }
     }
   }
 
@@ -189,7 +201,11 @@ class OpenIARepository {
       final response = await service.getModelsList(apiKey: _apiKey);
       return response;
     } catch (e) {
-      throw Exception(e.toString());
+      if (e is OpenAIException) {
+        rethrow;
+      } else {
+        throw Exception(e.toString());
+      }
     }
   }
 
@@ -208,7 +224,11 @@ class OpenIARepository {
           apiKey: _apiKey, config: _configEdits, inputWithInstruction: map);
       return response.toMap();
     } catch (e) {
-      rethrow;
+      if (e is OpenAIException) {
+        rethrow;
+      } else {
+        throw Exception(e.toString());
+      }
     }
   }
 
@@ -227,7 +247,11 @@ class OpenIARepository {
           apiKey: _apiKey, config: _configEdits, inputWithInstruction: map);
       return response;
     } catch (e) {
-      rethrow;
+      if (e is OpenAIException) {
+        rethrow;
+      } else {
+        throw Exception(e.toString());
+      }
     }
   }
 
@@ -247,8 +271,9 @@ class OpenIARepository {
     } catch (e) {
       if (e is OpenAIException) {
         rethrow;
+      } else {
+        throw Exception(e.toString());
       }
-      throw Exception(e.toString());
     }
   }
 
@@ -268,8 +293,9 @@ class OpenIARepository {
     } catch (e) {
       if (e is OpenAIException) {
         rethrow;
+      } else {
+        throw Exception(e.toString());
       }
-      throw Exception(e.toString());
     }
   }
 }

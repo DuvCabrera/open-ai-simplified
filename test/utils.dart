@@ -35,4 +35,12 @@ class Mocks {
     ],
     "usage": {"prompt_tokens": 25, "completion_tokens": 32, "total_tokens": 57}
   };
+
+  static Map<String, dynamic> mockImagesResponse = {
+    "created": 1589478378,
+    "data": [
+      {"url": "https://"},
+      {"url": "https://"}
+    ]
+  };
 }
