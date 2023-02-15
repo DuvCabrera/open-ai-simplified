@@ -12,4 +12,5 @@ class UrlBuilder {
   static const String editsPath = _baseUrl + _edits;
   static const String imagesGenerationsPath = _baseUrl + _images + _generations;
   static const String imagesVariationsPath = _baseUrl + _images + _variations;
+  static const String imagesEditsPath = _baseUrl + _images + _edits;
 }

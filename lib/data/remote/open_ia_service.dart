@@ -110,4 +110,43 @@ class OpenIAService {
 
     return ImagesResponse.fromMap(response.data);
   }
+
+  // Delivery an image from another image
+  Future<ImagesResponse> editImage({
+    required String prompt,
+    required File image,
+    File? mask,
+    required String apiKey,
+    required ConfigImages config,
+  }) async {
+    final Map<String, dynamic> map = {
+      'image': await MultipartFile.fromFile(
+        image.path,
+        filename: 'image',
+        contentType: MediaType('image', 'png'),
+      ),
+      "prompt": prompt,
+    };
+    if (mask != null) {
+      final maskMap = {
+        'mask': await MultipartFile.fromFile(
+          mask.path,
+          filename: 'image',
+          contentType: MediaType('image', 'png'),
+        ),
+      };
+      map.addAll(maskMap);
+    }
+    map.addAll(config.toMap());
+    final formData = FormData.fromMap(map);
+
+    final response = await dio.post(UrlBuilder.imagesEditsPath,
+        data: formData,
+        options: Options(headers: {
+          'Content-Type': 'multpart/form-data',
+          'Authorization': 'Bearer $apiKey'
+        }));
+
+    return ImagesResponse.fromMap(response.data);
+  }
 }

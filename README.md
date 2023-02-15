@@ -82,7 +82,29 @@ void main() async {
   images.data.forEach((element) {
     log(element.url);
   });
+   // Create a variation of an image, the image should be a png file with less then 4MB and a square
+  final imageVariation = await openAi.createAImageVariation(
+    imageFile: await downloadFile(images.data[0].url),
+  );
+  log(imageVariation.data[0].url);
+  // Edits an image, you also can pass another image as mask
+  final editImage = await openAi.editImage(
+      image: await downloadFile(images.data[0].url),
+      prompt: 'give a new hair style to the horse');
+  // Print the url with the image
+  log(editImage.data[0].url);
 }
+
+Future<File> downloadFile(String url) async {
+  Dio simple = Dio();
+  String savePath = '${Directory.systemTemp.path}/${url.split('/').last}';
+  await simple.download(url, savePath,
+      options: Options(responseType: ResponseType.bytes));
+  File file = File(savePath);
+  return file;
+}
+
+
 ```
 
 ## Contributing

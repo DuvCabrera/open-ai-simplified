@@ -354,4 +354,63 @@ class OpenIARepository {
       }
     }
   }
+
+  // Creates an edited or extended image given an original image and a prompt.
+  // Provide a mask is optional
+  // An mask is: An additional image whose fully transparent areas (e.g. where alpha is zero) indicate where image should be edited. Must be a valid PNG file, less than 4MB, and have the same dimensions as image.
+  // The image to edit. Must be a valid PNG file, less than 4MB, and square. If mask is not provided, image must have transparency, which will be used as the mask.
+  Future<ImagesResponse> editImage({
+    required File image,
+    File? mask,
+    required String prompt,
+  }) async {
+    try {
+      if (_apiKey.isEmpty) {
+        throw KeyNotFoundException();
+      }
+      if (prompt.isEmpty) {
+        throw InvalidParamsException();
+      }
+      final result = await service.editImage(
+          prompt: prompt,
+          image: image,
+          apiKey: _apiKey,
+          config: _configImages,
+          mask: mask);
+      return result;
+    } catch (e) {
+      if (e is OpenAIException) {
+        rethrow;
+      } else {
+        throw Exception(e.toString());
+      }
+    }
+  }
+
+  // Creates an edited or extended image given an original image and a prompt.
+  // Provide a mask is optional
+  // An mask is: An additional image whose fully transparent areas (e.g. where alpha is zero) indicate where image should be edited. Must be a valid PNG file, less than 4MB, and have the same dimensions as image.
+  Future<Map<String, dynamic>> editRawImage({
+    required File image,
+    File? mask,
+    required String prompt,
+  }) async {
+    try {
+      if (_apiKey.isEmpty) {
+        throw KeyNotFoundException();
+      }
+      if (prompt.isEmpty) {
+        throw InvalidParamsException();
+      }
+      final result = await service.editImage(
+          prompt: prompt, image: image, apiKey: _apiKey, config: _configImages);
+      return result.toMap();
+    } catch (e) {
+      if (e is OpenAIException) {
+        rethrow;
+      } else {
+        throw Exception(e.toString());
+      }
+    }
+  }
 }

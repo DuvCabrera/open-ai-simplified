@@ -6,7 +6,10 @@
     * Models.
     * Completions.
     * Edits
-    * ImagesGenerate
+    * Images
+        * Images Genegation
+        * Images Variation
+        * Images Edit
 
 ## 0.0.2
 

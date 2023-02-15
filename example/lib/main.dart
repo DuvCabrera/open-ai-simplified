@@ -44,6 +44,14 @@ void main() async {
     imageFile: await downloadFile(images.data[0].url),
   );
   log(imageVariation.data[0].url);
+  // Edits an image, you also can pass another image as mask
+  //The image to edit. Must be a valid PNG file, less than 4MB, and square. If mask is not provided, image must have transparency, which will be used as the mask.
+  final editImage = await openAi.editImage(
+      image:
+          await downloadFile('https://xxx.example-with-trasnparecy-area.com'),
+      prompt: 'with flames');
+  // Print the url with the image
+  log(editImage.data[0].url);
 }
 
 Future<File> downloadFile(String url) async {
