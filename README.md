@@ -34,7 +34,7 @@ Feature     | Availability
 Models      | ✅
 Completions | ✅
 Edits       | ✅
-Images      | ❌
+Images      | ✅
 Embeddings  | ❌
 Files       | ❌
 Fine-tunes  | ❌
@@ -73,6 +73,15 @@ void main() async {
       input: 'helo piple', instruction: 'fix the spelling mistakes');
   // Print the edits
   log(edit.choices[0].text);
+   // Configure the images params, this can also be done using the method configImagesFromMap
+  // The size of the generated images. Must be one of 256x256, 512x512, or 1024x1024
+  openAi.configImagesFromConfig(ConfigImages(n: 1, size: '256x256'));
+  // Create the images
+  final images = await openAi.getImages('horse with golden hair and dragons');
+  // Print the url with the images
+  images.data.forEach((element) {
+    log(element.url);
+  });
 }
 ```
 
