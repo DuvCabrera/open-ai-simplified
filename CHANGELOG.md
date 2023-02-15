@@ -1,4 +1,18 @@
+## 0.0.3
+* Added the funtionality of generateImages
+* Added documentation
+* Added some tests
+* Working API
+    * Models.
+    * Completions.
+    * Edits
+    * Images
+        * Images Genegation
+        * Images Variation
+        * Images Edit
+
 ## 0.0.2
+
 * Working API
     * Models.
     * Completions.
