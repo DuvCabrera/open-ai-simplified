@@ -42,6 +42,13 @@ class OpenIARepository {
     if (newConfig['n'] != null && (newConfig['n'] < 1 || newConfig['n'] > 10)) {
       throw InvalidParamsException(message: 'the n param is lower than 1');
     }
+    if (newConfig['size'] != '256x256' ||
+        newConfig['size'] != '512x512' ||
+        newConfig['size'] != '1024x1024') {
+      throw InvalidParamsException(
+          message:
+              'the size param must be ne of 256x256, 512x512, or 1024x1024');
+    }
     _configImages = _configImages.copyWith(
       n: newConfig['n'] ?? _configImages.n,
       size: newConfig['size'] ?? _configImages.size,
@@ -52,6 +59,13 @@ class OpenIARepository {
   void configImagesFromConfig(ConfigImages newConfig) {
     if (newConfig.n < 1 || newConfig.n > 10) {
       throw InvalidParamsException(message: 'the n param is lower than 1');
+    }
+    if (newConfig.size != '256x256' ||
+        newConfig.size != '512x512' ||
+        newConfig.size != '1024x1024') {
+      throw InvalidParamsException(
+          message:
+              'the size param must be ne of 256x256, 512x512, or 1024x1024');
     }
     _configImages = _configImages.copyWith(
       n: newConfig.n,
