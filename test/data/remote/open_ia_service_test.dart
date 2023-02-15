@@ -3,6 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:open_ai_simplified/data/remote/open_ia_service.dart';
+import 'package:open_ai_simplified/domain/models/config_images.dart';
+import 'package:open_ai_simplified/domain/models/images_response.dart';
 import 'package:open_ai_simplified/domain/models/models.dart';
 
 import '../../utils.dart';
@@ -15,9 +17,11 @@ void main() {
   late Map<String, dynamic> mockCompletionResponse;
   late Map<String, dynamic> mockModelsResponse;
   late Map<String, dynamic> mockEditsResponse;
+  late Map<String, dynamic> mockImagesResponse;
 
   setUp(() => sut = OpenIAService(dio));
   setUpAll(() {
+    mockImagesResponse = Mocks.mockImagesResponse;
     mockEditsResponse = Mocks.mockEditsResponse;
     mockModelsResponse = Mocks.mockModelsResponse;
     mockCompletionResponse = Mocks.mockCompletionResponse;
@@ -57,6 +61,21 @@ void main() {
         .getEdits(apiKey: '', config: ConfigEdits(), inputWithInstruction: {});
 
     expect(response, isA<EditsResponse>());
+    verify(dio.post(any, options: anyNamed('options'), data: anyNamed('data')))
+        .called(1);
+    verifyNoMoreInteractions(dio);
+  });
+
+  test('generateImages should return right ImagesResponse object', () async {
+    when(dio.post(any, options: anyNamed('options'), data: anyNamed('data')))
+        .thenAnswer((realInvocation) async => Response(
+            requestOptions: RequestOptions(path: ''),
+            data: mockImagesResponse));
+
+    final result = await sut
+        .generateImages(apiKey: '', config: ConfigImages(), prompt: {});
+
+    expect(result, isA<ImagesResponse>());
     verify(dio.post(any, options: anyNamed('options'), data: anyNamed('data')))
         .called(1);
     verifyNoMoreInteractions(dio);

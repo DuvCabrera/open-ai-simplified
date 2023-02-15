@@ -1,14 +1,22 @@
-import 'dart:convert';
-
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 class ConfigCompletion {
+  // model utilized to create the completion
   final String? model;
+  // Max Number of the Token disired to be spend in the request
   final int? maxTokens;
+  //What sampling temperature to use, between 0 and 2. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic.
   final double? temperature;
+  // An alternative to sampling with temperature, called nucleus sampling, where the model considers the results of the tokens with top_p probability mass. So 0.1 means only the tokens comprising the top 10% probability mass are considered.
+  // We generally recommend altering this or temperature but not both.
   final int? topP;
+  // How many completions to generate for each prompt.
+  // Note: Because this parameter generates many completions, it can quickly consume your token quota. Use carefully and ensure that you have reasonable settings for max_tokens and stop.
   final int? n;
+  // Whether to stream back partial progress. If set, tokens will be sent as data-only server-sent events as they become available, with the stream terminated by a data: [DONE] message.
   final bool? stream;
+  // Include the log probabilities on the logprobs most likely tokens, as well the chosen tokens. For example, if logprobs is 5, the API will return a list of the 5 most likely tokens. The API will always return the logprob of the sampled token, so there may be up to logprobs+1 elements in the response.
+  // The maximum value for logprobs is 5. If you need m
   final int? logprobs;
+  // Up to 4 sequences where the API will stop generating further tokens. The returned text will not contain the stop sequence.
   final String? stop;
 
   ConfigCompletion(
@@ -21,6 +29,7 @@ class ConfigCompletion {
       this.logprobs,
       this.stop = ""});
 
+  // Generate a new ConfigCompletion object from the original object
   ConfigCompletion copyWith({
     String? model,
     int? maxTokens,
@@ -43,6 +52,7 @@ class ConfigCompletion {
     );
   }
 
+  // Converts the object to a Map<String, dynamic>
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'model': model,
@@ -56,6 +66,7 @@ class ConfigCompletion {
     };
   }
 
+  // Create the object from a Map<String, dynamic>
   factory ConfigCompletion.fromMap(Map<String, dynamic> map) {
     return ConfigCompletion(
       model: map['model'] != null ? map['model'] as String : null,
@@ -69,9 +80,4 @@ class ConfigCompletion {
       stop: map['stop'] != null ? map['stop'] as String : null,
     );
   }
-
-  String toJson() => json.encode(toMap());
-
-  factory ConfigCompletion.fromJson(String source) =>
-      ConfigCompletion.fromMap(json.decode(source) as Map<String, dynamic>);
 }
