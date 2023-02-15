@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:open_ai_simplified/data/remote/open_ia_service.dart';
 import 'package:open_ai_simplified/domain/exceptions.dart';
@@ -60,8 +62,8 @@ class OpenIARepository {
     if (newConfig.n < 1 || newConfig.n > 10) {
       throw InvalidParamsException(message: 'the n param is lower than 1');
     }
-    if (newConfig.size != '256x256' ||
-        newConfig.size != '512x512' ||
+    if (newConfig.size != '256x256' &&
+        newConfig.size != '512x512' &&
         newConfig.size != '1024x1024') {
       throw InvalidParamsException(
           message:
@@ -304,6 +306,46 @@ class OpenIARepository {
       final result = await service.generateImages(
           apiKey: _apiKey, config: _configImages, prompt: map);
       return result;
+    } catch (e) {
+      if (e is OpenAIException) {
+        rethrow;
+      } else {
+        throw Exception(e.toString());
+      }
+    }
+  }
+
+  // create a variation of an image and return as ImagesResponse object
+  Future<ImagesResponse> createAImageVariation(
+      {required File imageFile}) async {
+    try {
+      if (_apiKey.isEmpty) {
+        throw KeyNotFoundException();
+      }
+
+      final result = await service.variateImage(
+          image: imageFile, apiKey: _apiKey, config: _configImages);
+      return result;
+    } catch (e) {
+      if (e is OpenAIException) {
+        rethrow;
+      } else {
+        throw Exception(e.toString());
+      }
+    }
+  }
+
+  // create a variation of an image and return as a Map
+  Future<Map<String, dynamic>> createRawImageVariation(
+      {required File imageFile}) async {
+    try {
+      if (_apiKey.isEmpty) {
+        throw KeyNotFoundException();
+      }
+
+      final result = await service.variateImage(
+          image: imageFile, apiKey: _apiKey, config: _configImages);
+      return result.toMap();
     } catch (e) {
       if (e is OpenAIException) {
         rethrow;

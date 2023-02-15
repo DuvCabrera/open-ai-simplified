@@ -1,5 +1,7 @@
 import 'dart:developer';
+import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:open_ai_simplified/domain/models/config_images.dart';
 import 'package:open_ai_simplified/open_ai_simplified.dart';
@@ -34,7 +36,21 @@ void main() async {
   // Create the images
   final images = await openAi.getImages('horse with golden hair and dragons');
   // Print the url with the images
-  images.data.forEach((element) {
-    print(element.url);
-  });
+  for (var element in images.data) {
+    log(element.url);
+  }
+  // Create a variation of an image, the image should be a png file with less then 4MB and a square
+  final imageVariation = await openAi.createAImageVariation(
+    imageFile: await downloadFile(images.data[0].url),
+  );
+  log(imageVariation.data[0].url);
+}
+
+Future<File> downloadFile(String url) async {
+  Dio simple = Dio();
+  String savePath = '${Directory.systemTemp.path}/${url.split('/').last}';
+  await simple.download(url, savePath,
+      options: Options(responseType: ResponseType.bytes));
+  File file = File(savePath);
+  return file;
 }
