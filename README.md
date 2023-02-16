@@ -36,10 +36,9 @@ Completions | ✅
 Edits       | ✅
 Images      | ✅
 Embeddings  | ✅
-Files       | ❌
+Files       | ✅
 Fine-tunes  | ❌
 Moderations | ❌
-Engines     | ❌
 
 ## Getting started
 

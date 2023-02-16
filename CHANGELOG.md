@@ -1,5 +1,9 @@
 ## 0.0.4
 
+* Added files feature
+
+## 0.0.4
+
 * Work on the documentation
 * Added embeddings feature
 
