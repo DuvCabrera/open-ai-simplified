@@ -4,3 +4,6 @@ export 'open_ai_models.dart';
 export 'config_edits.dart';
 export 'usage.dart';
 export 'edits_response.dart';
+export 'config_embedding.dart';
+export 'images_response.dart';
+export 'config_images.dart';

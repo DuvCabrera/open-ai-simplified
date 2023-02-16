@@ -1,9 +1,11 @@
 class Usage {
-  // Tokens spended with the request
+  /// Tokens spended with the request
   final int? promptTokens;
-  // Tokens Spended with the result
+
+  /// Tokens Spended with the result
   final int? completionTokens;
-  // Total of tokens spended
+
+  /// Total of tokens spended
   final int? totalTokens;
 
   Usage({
@@ -12,7 +14,7 @@ class Usage {
     this.totalTokens,
   });
 
-  // Converts the object to a Map<String, dynamic>
+  /// Converts the object to a Map<String, dynamic>
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'promptTokens': promptTokens,
@@ -21,7 +23,7 @@ class Usage {
     };
   }
 
-  // Create the object from a Map<String, dynamic>
+  /// Create the object from a Map<String, dynamic>
   factory Usage.fromMap(Map<String, dynamic> map) {
     return Usage(
       promptTokens:

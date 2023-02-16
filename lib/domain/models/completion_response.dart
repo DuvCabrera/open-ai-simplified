@@ -1,17 +1,22 @@
 import 'package:open_ai_simplified/domain/models/usage.dart';
 
 class CompletionResponse {
-  // id of the object
+  /// id of the object
   final String id;
-  // type of the object
+
+  /// type of the object
   final String object;
-  // date of the moment were the object was created
+
+  /// date of the moment were the object was created
   final int created;
-  // model utilized to create the completion
+
+  /// model utilized to create the completion
   final String model;
-  // list of the values that brings the completion
+
+  /// list of the values that brings the completion
   final List<Choices> choices;
-  // object that shows how much Tokens were spended on the request + response
+
+  /// object that shows how much Tokens were spended on the request + response
   final Usage usage;
 
   CompletionResponse(
@@ -22,7 +27,7 @@ class CompletionResponse {
       required this.choices,
       required this.usage});
 
-  // Converts the object to a Map<String, dynamic>
+  /// Converts the object to a Map<String, dynamic>
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
@@ -34,7 +39,7 @@ class CompletionResponse {
     };
   }
 
-  // Create the object from a Map<String, dynamic>
+  /// Create the object from a Map<String, dynamic>
   factory CompletionResponse.fromMap(Map<String, dynamic> map) {
     return CompletionResponse(
       id: map['id'] as String,
@@ -52,13 +57,16 @@ class CompletionResponse {
 }
 
 class Choices {
-  // Text requested
+  /// Text requested
   final String text;
-  // Index of the present text on the list
+
+  /// Index of the present text on the list
   final int index;
-  // Include the log probabilities on the logprobs most likely tokens, as well the chosen tokens. For example, if logprobs is 5, the API will return a list of the 5 most likely tokens. The API will always return the logprob of the sampled token, so there may be up to logprobs+1 elements in the response.
+
+  /// Include the log probabilities on the logprobs most likely tokens, as well the chosen tokens. For example, if logprobs is 5, the API will return a list of the 5 most likely tokens. The API will always return the logprob of the sampled token, so there may be up to logprobs+1 elements in the response.
   final int? logprobs;
-  // In case of the response need to stop, here will be the awnser to why it stop.
+
+  /// In case of the response need to stop, here will be the awnser to why it stop.
   final String finishReason;
 
   Choices({
@@ -68,7 +76,7 @@ class Choices {
     required this.finishReason,
   });
 
-  // Converts the object to a Map<String, dynamic>
+  /// Converts the object to a Map<String, dynamic>
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'text': text,
@@ -78,7 +86,7 @@ class Choices {
     };
   }
 
-  // Create the object from a Map<String, dynamic>
+  /// Create the object from a Map<String, dynamic>
   factory Choices.fromMap(Map<String, dynamic> map) {
     return Choices(
       text: map['text'] as String,
