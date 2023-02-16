@@ -1,17 +1,17 @@
 class OpenAiModels {
-  // List with the information about models
+  /// List with the information about models
   final List<Data> data;
 
   OpenAiModels(this.data);
 
-  // Converts the object to a Map<String, dynamic>
+  /// Converts the object to a Map<String, dynamic>
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'data': data.map((x) => x.toMap()).toList(),
     };
   }
 
-  // Create the object from a Map<String, dynamic>
+  /// Create the object from a Map<String, dynamic>
   factory OpenAiModels.fromMap(Map<String, dynamic> map) {
     return OpenAiModels(
       List<Data>.from(
@@ -24,11 +24,13 @@ class OpenAiModels {
 }
 
 class Data {
-  // id of the model [used on the configs]
+  /// id of the model [used on the configs]
   final String? id;
-  // type of object
+
+  /// type of object
   final String? objec;
-  // owner of the model
+
+  /// owner of the model
   final String? ownedBy;
   Data({
     this.id,
@@ -36,7 +38,7 @@ class Data {
     this.ownedBy,
   });
 
-  // Converts the object to a Map<String, dynamic>
+  /// Converts the object to a Map<String, dynamic>
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
@@ -45,7 +47,7 @@ class Data {
     };
   }
 
-  // Create the object from a Map<String, dynamic>
+  /// Create the object from a Map<String, dynamic>
   factory Data.fromMap(Map<String, dynamic> map) {
     return Data(
       id: map['id'] != null ? map['id'] as String : null,

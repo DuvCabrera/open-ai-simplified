@@ -7,50 +7,66 @@ import 'package:open_ai_simplified/domain/models/config_images.dart';
 import 'package:open_ai_simplified/open_ai_simplified.dart';
 
 void main() async {
-  // Load env
+  /// Load env
   await dotenv.load(fileName: ".env");
-  // Create a new repository.
+
+  /// Create a new repository.
   OpenIARepository openAi = OpenIARepository();
-  // // Add the api key.
+
+  /// Add the api key.
   openAi.addApiKey(dotenv.env['API_KEY']!);
-  // Retrive the models avaibles.
+
+  /// Retrive the models avaibles.
   final models = await openAi.getRawModelsList();
-  // Print the models
+
+  /// Print the models
   log(models.toString());
-  // Configure the completion params, this can also be done using the method configCompletionFromMap
+
+  /// Configure the completion params, this can also be done using the method configCompletionFromMap
   openAi.configCompletionFromConfig(ConfigCompletion(temperature: 0.6));
-  // Create a completion
+
+  /// Create a completion
   final completion = await openAi.getCompletion('what times it?');
-  // Print the completion
+
+  /// Print the completion
   log(completion.choices[0].text);
-  // Configure the edits params, this can also be done using the method configEditsFromMap
+
+  /// Configure the edits params, this can also be done using the method configEditsFromMap
   openAi.configEditsFromConfig(config: ConfigEdits(temperature: 0.8));
-  // Create the edits
+
+  /// Create the edits
   final edit = await openAi.getEdits(
       input: 'helo piple', instruction: 'fix the spelling mistakes');
-  // Print the edits
+
+  /// Print the edits
   log(edit.choices[0].text);
-  // Configure the images params, this can also be done using the method configImagesFromMap
-  // The size of the generated images. Must be one of 256x256, 512x512, or 1024x1024
+
+  /// Configure the images params, this can also be done using the method configImagesFromMap
+  /// The size of the generated images. Must be one of 256x256, 512x512, or 1024x1024
   openAi.configImagesFromConfig(ConfigImages(n: 1, size: '256x256'));
-  // Create the images
+
+  /// Create the images
   final images = await openAi.getImages('horse with golden hair and dragons');
-  // Print the url with the images
+
+  /// Print the url with the images
   for (var element in images.data) {
     log(element.url);
   }
-  // Create a variation of an image, the image should be a png file with less then 4MB and a square
+
+  /// Create a variation of an image, the image should be a png file with less then 4MB and a square
   final imageVariation = await openAi.createAImageVariation(
     imageFile: await downloadFile(images.data[0].url),
   );
   log(imageVariation.data[0].url);
-  // Edits an image, you also can pass another image as mask
-  //The image to edit. Must be a valid PNG file, less than 4MB, and square. If mask is not provided, image must have transparency, which will be used as the mask.
+
+  /// Edits an image, you also can pass another image as mask
+  /// The image to edit. Must be a valid PNG file, less than 4MB, and square. If mask is not provided, image must have transparency, which will be used as the mask.
   final editImage = await openAi.editImage(
       image:
           await downloadFile('https://xxx.example-with-trasnparecy-area.com'),
       prompt: 'with flames');
-  // Print the url with the image
+
+  /// Print the url with the image
   log(editImage.data[0].url);
 }
 
