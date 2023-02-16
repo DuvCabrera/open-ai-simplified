@@ -4,7 +4,7 @@ import 'package:mockito/mockito.dart';
 import 'package:open_ai_simplified/data/remote/open_ia_service.dart';
 import 'package:open_ai_simplified/data/repositories/open_ai_repository.dart';
 import 'package:open_ai_simplified/domain/exceptions.dart';
-import 'package:open_ai_simplified/domain/models/images_response.dart';
+import 'package:open_ai_simplified/domain/models/embeddings_response.dart';
 import 'package:open_ai_simplified/domain/models/models.dart';
 
 import '../../utils.dart';
@@ -18,8 +18,10 @@ void main() {
   late Map<String, dynamic> mockModelsResponse;
   late Map<String, dynamic> mockEditsResponse;
   late Map<String, dynamic> mockImagesResponse;
+  late Map<String, dynamic> mockEmbeddingResponse;
 
   setUpAll(() {
+    mockEmbeddingResponse = Mocks.mockEmbeddingsResponse;
     mockImagesResponse = Mocks.mockImagesResponse;
     mockEditsResponse = Mocks.mockEditsResponse;
     mockModelsResponse = Mocks.mockModelsResponse;
@@ -332,6 +334,95 @@ void main() {
     final result = sut.getImages('');
     expect(result, throwsA(isA<InvalidParamsException>()));
 
+    verifyNoMoreInteractions(openIAService);
+  });
+
+  test('createEmbedding shout return an EmbeddingsResponse object', () async {
+    when(openIAService.createEmbedding(
+            apiKey: anyNamed('apiKey'),
+            promptWithModel: anyNamed('promptWithModel')))
+        .thenAnswer((realInvocation) async =>
+            EmbeddingsResponse.fromMap(mockEmbeddingResponse));
+
+    final result = await sut.createEmbedding(prompt: 's');
+    expect(result, isA<EmbeddingsResponse>());
+    verify(openIAService.createEmbedding(
+            apiKey: anyNamed('apiKey'),
+            promptWithModel: anyNamed('promptWithModel')))
+        .called(1);
+    verifyNoMoreInteractions(openIAService);
+  });
+
+  test(
+      'createEmbedding shout throw a KeyNotFoundException when apiKey is not provided',
+      () async {
+    when(openIAService.createEmbedding(
+            apiKey: anyNamed('apiKey'),
+            promptWithModel: anyNamed('promptWithModel')))
+        .thenAnswer((realInvocation) async =>
+            EmbeddingsResponse.fromMap(mockEmbeddingResponse));
+    sut.addApiKey('');
+    final result = sut.createEmbedding(prompt: 's');
+    expect(result, throwsA(isA<KeyNotFoundException>()));
+    verifyNoMoreInteractions(openIAService);
+  });
+
+  test(
+      'createEmbedding shout throw a InvalidParamsException when prompt is empty',
+      () async {
+    when(openIAService.createEmbedding(
+            apiKey: anyNamed('apiKey'),
+            promptWithModel: anyNamed('promptWithModel')))
+        .thenAnswer((realInvocation) async =>
+            EmbeddingsResponse.fromMap(mockEmbeddingResponse));
+
+    final result = sut.createEmbedding(prompt: '');
+    expect(result, throwsA(isA<InvalidParamsException>()));
+    verifyNoMoreInteractions(openIAService);
+  });
+
+  test('createRawEmbedding shout return an EmbeddingsResponse object',
+      () async {
+    when(openIAService.createEmbedding(
+            apiKey: anyNamed('apiKey'),
+            promptWithModel: anyNamed('promptWithModel')))
+        .thenAnswer((realInvocation) async =>
+            EmbeddingsResponse.fromMap(mockEmbeddingResponse));
+
+    final result = await sut.createRawEmbedding(prompt: 's');
+    expect(result, isA<Map>());
+    verify(openIAService.createEmbedding(
+            apiKey: anyNamed('apiKey'),
+            promptWithModel: anyNamed('promptWithModel')))
+        .called(1);
+    verifyNoMoreInteractions(openIAService);
+  });
+
+  test(
+      'createRawEmbedding shout throw a KeyNotFoundException when apiKey is not provided',
+      () async {
+    when(openIAService.createEmbedding(
+            apiKey: anyNamed('apiKey'),
+            promptWithModel: anyNamed('promptWithModel')))
+        .thenAnswer((realInvocation) async =>
+            EmbeddingsResponse.fromMap(mockEmbeddingResponse));
+    sut.addApiKey('');
+    final result = sut.createRawEmbedding(prompt: 's');
+    expect(result, throwsA(isA<KeyNotFoundException>()));
+    verifyNoMoreInteractions(openIAService);
+  });
+
+  test(
+      'createRawEmbedding shout throw a InvalidParamsException when prompt is empty',
+      () async {
+    when(openIAService.createEmbedding(
+            apiKey: anyNamed('apiKey'),
+            promptWithModel: anyNamed('promptWithModel')))
+        .thenAnswer((realInvocation) async =>
+            EmbeddingsResponse.fromMap(mockEmbeddingResponse));
+
+    final result = sut.createRawEmbedding(prompt: '');
+    expect(result, throwsA(isA<InvalidParamsException>()));
     verifyNoMoreInteractions(openIAService);
   });
 }

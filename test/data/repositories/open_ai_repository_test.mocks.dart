@@ -3,12 +3,15 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i6;
+import 'dart:async' as _i7;
+import 'dart:io' as _i9;
 
 import 'package:dio/dio.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:open_ai_simplified/data/remote/open_ia_service.dart' as _i5;
-import 'package:open_ai_simplified/domain/models/config_images.dart' as _i7;
+import 'package:open_ai_simplified/data/remote/open_ia_service.dart' as _i6;
+import 'package:open_ai_simplified/domain/models/config_images.dart' as _i8;
+import 'package:open_ai_simplified/domain/models/embeddings_response.dart'
+    as _i5;
 import 'package:open_ai_simplified/domain/models/images_response.dart' as _i4;
 import 'package:open_ai_simplified/domain/models/models.dart' as _i3;
 
@@ -75,10 +78,21 @@ class _FakeImagesResponse_4 extends _i1.SmartFake
         );
 }
 
+class _FakeEmbeddingsResponse_5 extends _i1.SmartFake
+    implements _i5.EmbeddingsResponse {
+  _FakeEmbeddingsResponse_5(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
 /// A class which mocks [OpenIAService].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockOpenIAService extends _i1.Mock implements _i5.OpenIAService {
+class MockOpenIAService extends _i1.Mock implements _i6.OpenIAService {
   MockOpenIAService() {
     _i1.throwOnMissingStub(this);
   }
@@ -92,7 +106,7 @@ class MockOpenIAService extends _i1.Mock implements _i5.OpenIAService {
         ),
       ) as _i2.Dio);
   @override
-  _i6.Future<_i3.CompletionResponse> getCompletion({
+  _i7.Future<_i3.CompletionResponse> getCompletion({
     required String? prompt,
     required String? apiKey,
     required _i3.ConfigCompletion? config,
@@ -108,7 +122,7 @@ class MockOpenIAService extends _i1.Mock implements _i5.OpenIAService {
           },
         ),
         returnValue:
-            _i6.Future<_i3.CompletionResponse>.value(_FakeCompletionResponse_1(
+            _i7.Future<_i3.CompletionResponse>.value(_FakeCompletionResponse_1(
           this,
           Invocation.method(
             #getCompletion,
@@ -120,16 +134,16 @@ class MockOpenIAService extends _i1.Mock implements _i5.OpenIAService {
             },
           ),
         )),
-      ) as _i6.Future<_i3.CompletionResponse>);
+      ) as _i7.Future<_i3.CompletionResponse>);
   @override
-  _i6.Future<_i3.OpenAiModels> getModelsList({required String? apiKey}) =>
+  _i7.Future<_i3.OpenAiModels> getModelsList({required String? apiKey}) =>
       (super.noSuchMethod(
         Invocation.method(
           #getModelsList,
           [],
           {#apiKey: apiKey},
         ),
-        returnValue: _i6.Future<_i3.OpenAiModels>.value(_FakeOpenAiModels_2(
+        returnValue: _i7.Future<_i3.OpenAiModels>.value(_FakeOpenAiModels_2(
           this,
           Invocation.method(
             #getModelsList,
@@ -137,9 +151,9 @@ class MockOpenIAService extends _i1.Mock implements _i5.OpenIAService {
             {#apiKey: apiKey},
           ),
         )),
-      ) as _i6.Future<_i3.OpenAiModels>);
+      ) as _i7.Future<_i3.OpenAiModels>);
   @override
-  _i6.Future<_i3.EditsResponse> getEdits({
+  _i7.Future<_i3.EditsResponse> getEdits({
     required String? apiKey,
     required _i3.ConfigEdits? config,
     required Map<String, dynamic>? inputWithInstruction,
@@ -154,7 +168,7 @@ class MockOpenIAService extends _i1.Mock implements _i5.OpenIAService {
             #inputWithInstruction: inputWithInstruction,
           },
         ),
-        returnValue: _i6.Future<_i3.EditsResponse>.value(_FakeEditsResponse_3(
+        returnValue: _i7.Future<_i3.EditsResponse>.value(_FakeEditsResponse_3(
           this,
           Invocation.method(
             #getEdits,
@@ -166,11 +180,11 @@ class MockOpenIAService extends _i1.Mock implements _i5.OpenIAService {
             },
           ),
         )),
-      ) as _i6.Future<_i3.EditsResponse>);
+      ) as _i7.Future<_i3.EditsResponse>);
   @override
-  _i6.Future<_i4.ImagesResponse> generateImages({
+  _i7.Future<_i4.ImagesResponse> generateImages({
     required String? apiKey,
-    required _i7.ConfigImages? config,
+    required _i8.ConfigImages? config,
     required Map<String, dynamic>? prompt,
   }) =>
       (super.noSuchMethod(
@@ -183,7 +197,7 @@ class MockOpenIAService extends _i1.Mock implements _i5.OpenIAService {
             #prompt: prompt,
           },
         ),
-        returnValue: _i6.Future<_i4.ImagesResponse>.value(_FakeImagesResponse_4(
+        returnValue: _i7.Future<_i4.ImagesResponse>.value(_FakeImagesResponse_4(
           this,
           Invocation.method(
             #generateImages,
@@ -195,5 +209,96 @@ class MockOpenIAService extends _i1.Mock implements _i5.OpenIAService {
             },
           ),
         )),
-      ) as _i6.Future<_i4.ImagesResponse>);
+      ) as _i7.Future<_i4.ImagesResponse>);
+  @override
+  _i7.Future<_i4.ImagesResponse> variateImage({
+    required _i9.File? image,
+    required String? apiKey,
+    required _i8.ConfigImages? config,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #variateImage,
+          [],
+          {
+            #image: image,
+            #apiKey: apiKey,
+            #config: config,
+          },
+        ),
+        returnValue: _i7.Future<_i4.ImagesResponse>.value(_FakeImagesResponse_4(
+          this,
+          Invocation.method(
+            #variateImage,
+            [],
+            {
+              #image: image,
+              #apiKey: apiKey,
+              #config: config,
+            },
+          ),
+        )),
+      ) as _i7.Future<_i4.ImagesResponse>);
+  @override
+  _i7.Future<_i4.ImagesResponse> editImage({
+    required String? prompt,
+    required _i9.File? image,
+    _i9.File? mask,
+    required String? apiKey,
+    required _i8.ConfigImages? config,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #editImage,
+          [],
+          {
+            #prompt: prompt,
+            #image: image,
+            #mask: mask,
+            #apiKey: apiKey,
+            #config: config,
+          },
+        ),
+        returnValue: _i7.Future<_i4.ImagesResponse>.value(_FakeImagesResponse_4(
+          this,
+          Invocation.method(
+            #editImage,
+            [],
+            {
+              #prompt: prompt,
+              #image: image,
+              #mask: mask,
+              #apiKey: apiKey,
+              #config: config,
+            },
+          ),
+        )),
+      ) as _i7.Future<_i4.ImagesResponse>);
+  @override
+  _i7.Future<_i5.EmbeddingsResponse> createEmbedding({
+    required String? apiKey,
+    required Map<String, dynamic>? promptWithModel,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #createEmbedding,
+          [],
+          {
+            #apiKey: apiKey,
+            #promptWithModel: promptWithModel,
+          },
+        ),
+        returnValue:
+            _i7.Future<_i5.EmbeddingsResponse>.value(_FakeEmbeddingsResponse_5(
+          this,
+          Invocation.method(
+            #createEmbedding,
+            [],
+            {
+              #apiKey: apiKey,
+              #promptWithModel: promptWithModel,
+            },
+          ),
+        )),
+      ) as _i7.Future<_i5.EmbeddingsResponse>);
 }

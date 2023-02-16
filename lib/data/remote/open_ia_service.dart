@@ -5,15 +5,15 @@ import 'package:dio/dio.dart';
 import 'package:http_parser/http_parser.dart';
 
 import 'package:open_ai_simplified/data/infraestructure/url_builder.dart';
-import 'package:open_ai_simplified/domain/models/config_images.dart';
-import 'package:open_ai_simplified/domain/models/images_response.dart';
+import 'package:open_ai_simplified/domain/models/embeddings_response.dart';
 import 'package:open_ai_simplified/domain/models/models.dart';
 
 class OpenIAService {
   final Dio dio;
 
   OpenIAService(this.dio);
-  // Generate and delivery a Completion via post
+
+  /// Generate and delivery a Completion via post
   Future<CompletionResponse> getCompletion({
     required String prompt,
     required String apiKey,
@@ -35,7 +35,7 @@ class OpenIAService {
     }
   }
 
-  // Get the models availables to use on the configs via get
+  /// Get the models availables to use on the configs via get
   Future<OpenAiModels> getModelsList({
     required String apiKey,
   }) async {
@@ -48,7 +48,7 @@ class OpenIAService {
     }
   }
 
-  // Generate and delivery a Edits via post
+  /// Generate and delivery a Edits via post
   Future<EditsResponse> getEdits(
       {required String apiKey,
       required ConfigEdits config,
@@ -68,7 +68,7 @@ class OpenIAService {
     }
   }
 
-  // Generate and delivery Images via post
+  /// Generate and delivery Images via post
   Future<ImagesResponse> generateImages(
       {required String apiKey,
       required ConfigImages config,
@@ -85,7 +85,7 @@ class OpenIAService {
     return ImagesResponse.fromMap(response.data);
   }
 
-  // Delivery a variation of an image provided
+  /// Delivery a variation of an image provided
   Future<ImagesResponse> variateImage({
     required File image,
     required String apiKey,
@@ -111,7 +111,7 @@ class OpenIAService {
     return ImagesResponse.fromMap(response.data);
   }
 
-  // Delivery an image from another image
+  /// Delivery an image from another image
   Future<ImagesResponse> editImage({
     required String prompt,
     required File image,
@@ -148,5 +148,18 @@ class OpenIAService {
         }));
 
     return ImagesResponse.fromMap(response.data);
+  }
+
+  /// Create Embeddings
+  Future<EmbeddingsResponse> createEmbedding(
+      {required String apiKey,
+      required Map<String, dynamic> promptWithModel}) async {
+    final response = await dio.post(UrlBuilder.embeddingsPath,
+        data: promptWithModel,
+        options: Options(headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $apiKey'
+        }));
+    return EmbeddingsResponse.fromMap(response.data);
   }
 }
