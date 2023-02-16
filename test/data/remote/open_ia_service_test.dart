@@ -3,9 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:open_ai_simplified/data/remote/open_ia_service.dart';
-import 'package:open_ai_simplified/domain/models/config_images.dart';
 import 'package:open_ai_simplified/domain/models/embeddings_response.dart';
-import 'package:open_ai_simplified/domain/models/images_response.dart';
 import 'package:open_ai_simplified/domain/models/models.dart';
 
 import '../../utils.dart';

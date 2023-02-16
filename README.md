@@ -93,6 +93,12 @@ void main() async {
       prompt: 'give a new hair style to the horse');
   // Print the url with the image
   log(editImage.data[0].url);
+
+  /// create an embedding
+  final embedding = await openAi.createEmbedding(prompt: 'sabado a noite');
+
+  /// print the embeddings
+  log(embedding.data[0].embedding.toString());
 }
 
 Future<File> downloadFile(String url) async {

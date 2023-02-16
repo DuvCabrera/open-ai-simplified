@@ -3,10 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:open_ai_simplified/data/remote/open_ia_service.dart';
 import 'package:open_ai_simplified/domain/exceptions.dart';
-import 'package:open_ai_simplified/domain/models/config_embedding.dart';
-import 'package:open_ai_simplified/domain/models/config_images.dart';
 import 'package:open_ai_simplified/domain/models/embeddings_response.dart';
-import 'package:open_ai_simplified/domain/models/images_response.dart';
 import 'package:open_ai_simplified/domain/models/models.dart';
 
 class OpenIARepository {
@@ -441,7 +438,7 @@ class OpenIARepository {
       {required String prompt}) async {
     try {
       _checkApi([prompt]);
-      final map = {'model': _configEmbedding.model, 'prompt': prompt};
+      final map = {'model': _configEmbedding.model, 'input': prompt};
       final result =
           await service.createEmbedding(apiKey: _apiKey, promptWithModel: map);
       return result.toMap();
@@ -458,7 +455,7 @@ class OpenIARepository {
   Future<EmbeddingsResponse> createEmbedding({required String prompt}) async {
     try {
       _checkApi([prompt]);
-      final map = {'model': _configEmbedding.model, 'prompt': prompt};
+      final map = {'model': _configEmbedding.model, 'input': prompt};
       final result =
           await service.createEmbedding(apiKey: _apiKey, promptWithModel: map);
       return result;

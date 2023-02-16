@@ -5,7 +5,6 @@ import 'package:open_ai_simplified/data/remote/open_ia_service.dart';
 import 'package:open_ai_simplified/data/repositories/open_ai_repository.dart';
 import 'package:open_ai_simplified/domain/exceptions.dart';
 import 'package:open_ai_simplified/domain/models/embeddings_response.dart';
-import 'package:open_ai_simplified/domain/models/images_response.dart';
 import 'package:open_ai_simplified/domain/models/models.dart';
 
 import '../../utils.dart';

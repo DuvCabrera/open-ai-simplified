@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:open_ai_simplified/domain/models/config_images.dart';
 import 'package:open_ai_simplified/open_ai_simplified.dart';
 
 void main() async {
@@ -68,6 +67,12 @@ void main() async {
 
   /// Print the url with the image
   log(editImage.data[0].url);
+
+  /// create an embedding
+  final embedding = await openAi.createEmbedding(prompt: 'sabado a noite');
+
+  /// print the embeddings
+  log(embedding.data[0].embedding.toString());
 }
 
 Future<File> downloadFile(String url) async {

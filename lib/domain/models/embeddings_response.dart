@@ -60,7 +60,7 @@ class EmbeddingData {
   factory EmbeddingData.fromMap(Map<String, dynamic> map) {
     return EmbeddingData(
       map['object'] as String,
-      List<double>.from((map['embedding'] as List<double>)),
+      List<double>.from((map['embedding'] as List<dynamic>)),
       map['index'] as int,
     );
   }

@@ -5,10 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:http_parser/http_parser.dart';
 
 import 'package:open_ai_simplified/data/infraestructure/url_builder.dart';
-import 'package:open_ai_simplified/domain/models/config_embedding.dart';
-import 'package:open_ai_simplified/domain/models/config_images.dart';
 import 'package:open_ai_simplified/domain/models/embeddings_response.dart';
-import 'package:open_ai_simplified/domain/models/images_response.dart';
 import 'package:open_ai_simplified/domain/models/models.dart';
 
 class OpenIAService {
