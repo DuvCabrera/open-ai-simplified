@@ -35,7 +35,7 @@ Models      | ✅
 Completions | ✅
 Edits       | ✅
 Images      | ✅
-Embeddings  | ❌
+Embeddings  | ✅
 Files       | ❌
 Fine-tunes  | ❌
 Moderations | ❌

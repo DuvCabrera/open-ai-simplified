@@ -5,7 +5,9 @@ import 'package:dio/dio.dart';
 import 'package:http_parser/http_parser.dart';
 
 import 'package:open_ai_simplified/data/infraestructure/url_builder.dart';
+import 'package:open_ai_simplified/domain/models/config_embedding.dart';
 import 'package:open_ai_simplified/domain/models/config_images.dart';
+import 'package:open_ai_simplified/domain/models/embeddings_response.dart';
 import 'package:open_ai_simplified/domain/models/images_response.dart';
 import 'package:open_ai_simplified/domain/models/models.dart';
 
@@ -149,5 +151,18 @@ class OpenIAService {
         }));
 
     return ImagesResponse.fromMap(response.data);
+  }
+
+  /// Create Embeddings
+  Future<EmbeddingsResponse> createEmbedding(
+      {required String apiKey,
+      required Map<String, dynamic> promptWithModel}) async {
+    final response = await dio.post(UrlBuilder.embeddingsPath,
+        data: promptWithModel,
+        options: Options(headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $apiKey'
+        }));
+    return EmbeddingsResponse.fromMap(response.data);
   }
 }

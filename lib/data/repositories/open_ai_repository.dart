@@ -3,7 +3,9 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:open_ai_simplified/data/remote/open_ia_service.dart';
 import 'package:open_ai_simplified/domain/exceptions.dart';
+import 'package:open_ai_simplified/domain/models/config_embedding.dart';
 import 'package:open_ai_simplified/domain/models/config_images.dart';
+import 'package:open_ai_simplified/domain/models/embeddings_response.dart';
 import 'package:open_ai_simplified/domain/models/images_response.dart';
 import 'package:open_ai_simplified/domain/models/models.dart';
 
@@ -29,6 +31,11 @@ class OpenIARepository {
   /// service of getting images, default values are setted but you can change it with
   /// the method configImagesFromMap or configImagesFromConfig
   ConfigImages _configImages = ConfigImages();
+
+  /// contains a ConfigEmbedding object that have the information necessary to configure the
+  /// service of getting embeddings, default values are setted but you can change it with
+  /// the method configEmbeddingFromMap or configEmbeddingFromConfig
+  ConfigEmbedding _configEmbedding = ConfigEmbedding();
 
   /// this is the service that makes tha API calls
   OpenIAService get service => _service;
@@ -410,6 +417,53 @@ class OpenIARepository {
         rethrow;
       } else {
         throw Exception(e.toString());
+      }
+    }
+  }
+
+  /// Creates an embedding vector representing the input text. returns it in Map
+  Future<Map<String, dynamic>> createRawEmbedding(
+      {required String prompt}) async {
+    try {
+      _checkApi([prompt]);
+      final map = {'model': _configEmbedding.model, 'prompt': prompt};
+      final result =
+          await service.createEmbedding(apiKey: _apiKey, promptWithModel: map);
+      return result.toMap();
+    } catch (e) {
+      if (e is OpenAIException) {
+        rethrow;
+      } else {
+        throw Exception(e.toString());
+      }
+    }
+  }
+
+  /// Creates an embedding vector representing the input text. returns it as a EmbeddingsResponse object
+  Future<EmbeddingsResponse> createEmbedding({required String prompt}) async {
+    try {
+      _checkApi([prompt]);
+      final map = {'model': _configEmbedding.model, 'prompt': prompt};
+      final result =
+          await service.createEmbedding(apiKey: _apiKey, promptWithModel: map);
+      return result;
+    } catch (e) {
+      if (e is OpenAIException) {
+        rethrow;
+      } else {
+        throw Exception(e.toString());
+      }
+    }
+  }
+
+  /// checks if the prerequisites are valid
+  void _checkApi(List<String> values) {
+    if (_apiKey.isEmpty) {
+      throw KeyNotFoundException();
+    }
+    for (var item in values) {
+      if (item.isEmpty) {
+        throw InvalidParamsException();
       }
     }
   }

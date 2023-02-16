@@ -1,3 +1,8 @@
+## 0.0.4
+
+* Work on the documentation
+* Added embeddings feature
+
 ## 0.0.3
 * Added the funtionality of generateImages
 * Added documentation
