@@ -46,6 +46,21 @@ class OpenIARepository {
     _apiKey = apiKey;
   }
 
+  /// configure Embedding service from map
+  void configEmbeddingFromMap(Map<String, dynamic> newConfig) {
+    if (newConfig.isEmpty) {
+      throw InvalidParamsException(
+          message: 'newConfig should have data inside');
+    }
+    _configEmbedding =
+        ConfigEmbedding(model: newConfig['model'] ?? _configEmbedding.model);
+  }
+
+  /// configure Embedding service from map
+  void configEmbeddingConfig(ConfigEmbedding newConfig) {
+    _configEmbedding = ConfigEmbedding(model: newConfig.model);
+  }
+
   /// configure the images service from a map
   void configImagesFromMap(Map<String, dynamic> newConfig) {
     if (newConfig['n'] != null && (newConfig['n'] < 1 || newConfig['n'] > 10)) {

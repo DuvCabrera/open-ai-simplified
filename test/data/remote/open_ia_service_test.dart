@@ -4,6 +4,7 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:open_ai_simplified/data/remote/open_ia_service.dart';
 import 'package:open_ai_simplified/domain/models/config_images.dart';
+import 'package:open_ai_simplified/domain/models/embeddings_response.dart';
 import 'package:open_ai_simplified/domain/models/images_response.dart';
 import 'package:open_ai_simplified/domain/models/models.dart';
 
@@ -18,9 +19,11 @@ void main() {
   late Map<String, dynamic> mockModelsResponse;
   late Map<String, dynamic> mockEditsResponse;
   late Map<String, dynamic> mockImagesResponse;
+  late Map<String, dynamic> mockEmbeddingResponse;
 
   setUp(() => sut = OpenIAService(dio));
   setUpAll(() {
+    mockEmbeddingResponse = Mocks.mockEmbeddingsResponse;
     mockImagesResponse = Mocks.mockImagesResponse;
     mockEditsResponse = Mocks.mockEditsResponse;
     mockModelsResponse = Mocks.mockModelsResponse;
@@ -76,6 +79,19 @@ void main() {
         .generateImages(apiKey: '', config: ConfigImages(), prompt: {});
 
     expect(result, isA<ImagesResponse>());
+    verify(dio.post(any, options: anyNamed('options'), data: anyNamed('data')))
+        .called(1);
+    verifyNoMoreInteractions(dio);
+  });
+
+  test('createEmbedding should return EmbeddingsResponse object', () async {
+    when(dio.post(any, options: anyNamed('options'), data: anyNamed('data')))
+        .thenAnswer((realInvocation) async => Response(
+            requestOptions: RequestOptions(path: ''),
+            data: mockEmbeddingResponse));
+
+    final result = await sut.createEmbedding(apiKey: '', promptWithModel: {});
+    expect(result, isA<EmbeddingsResponse>());
     verify(dio.post(any, options: anyNamed('options'), data: anyNamed('data')))
         .called(1);
     verifyNoMoreInteractions(dio);
