@@ -3,16 +3,16 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i7;
-import 'dart:io' as _i9;
+import 'dart:async' as _i8;
+import 'dart:io' as _i6;
 
 import 'package:dio/dio.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:open_ai_simplified/data/remote/open_ia_service.dart' as _i6;
-import 'package:open_ai_simplified/domain/models/config_images.dart' as _i8;
+import 'package:open_ai_simplified/data/remote/open_ia_service.dart' as _i7;
 import 'package:open_ai_simplified/domain/models/embeddings_response.dart'
+    as _i4;
+import 'package:open_ai_simplified/domain/models/list_file_response.dart'
     as _i5;
-import 'package:open_ai_simplified/domain/models/images_response.dart' as _i4;
 import 'package:open_ai_simplified/domain/models/models.dart' as _i3;
 
 // ignore_for_file: type=lint
@@ -68,7 +68,7 @@ class _FakeEditsResponse_3 extends _i1.SmartFake implements _i3.EditsResponse {
 }
 
 class _FakeImagesResponse_4 extends _i1.SmartFake
-    implements _i4.ImagesResponse {
+    implements _i3.ImagesResponse {
   _FakeImagesResponse_4(
     Object parent,
     Invocation parentInvocation,
@@ -79,8 +79,39 @@ class _FakeImagesResponse_4 extends _i1.SmartFake
 }
 
 class _FakeEmbeddingsResponse_5 extends _i1.SmartFake
-    implements _i5.EmbeddingsResponse {
+    implements _i4.EmbeddingsResponse {
   _FakeEmbeddingsResponse_5(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeListFileResponse_6 extends _i1.SmartFake
+    implements _i5.ListFileResponse {
+  _FakeListFileResponse_6(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeFileData_7 extends _i1.SmartFake implements _i5.FileData {
+  _FakeFileData_7(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeFile_8 extends _i1.SmartFake implements _i6.File {
+  _FakeFile_8(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -92,7 +123,7 @@ class _FakeEmbeddingsResponse_5 extends _i1.SmartFake
 /// A class which mocks [OpenIAService].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockOpenIAService extends _i1.Mock implements _i6.OpenIAService {
+class MockOpenIAService extends _i1.Mock implements _i7.OpenIAService {
   MockOpenIAService() {
     _i1.throwOnMissingStub(this);
   }
@@ -106,7 +137,7 @@ class MockOpenIAService extends _i1.Mock implements _i6.OpenIAService {
         ),
       ) as _i2.Dio);
   @override
-  _i7.Future<_i3.CompletionResponse> getCompletion({
+  _i8.Future<_i3.CompletionResponse> getCompletion({
     required String? prompt,
     required String? apiKey,
     required _i3.ConfigCompletion? config,
@@ -122,7 +153,7 @@ class MockOpenIAService extends _i1.Mock implements _i6.OpenIAService {
           },
         ),
         returnValue:
-            _i7.Future<_i3.CompletionResponse>.value(_FakeCompletionResponse_1(
+            _i8.Future<_i3.CompletionResponse>.value(_FakeCompletionResponse_1(
           this,
           Invocation.method(
             #getCompletion,
@@ -134,16 +165,16 @@ class MockOpenIAService extends _i1.Mock implements _i6.OpenIAService {
             },
           ),
         )),
-      ) as _i7.Future<_i3.CompletionResponse>);
+      ) as _i8.Future<_i3.CompletionResponse>);
   @override
-  _i7.Future<_i3.OpenAiModels> getModelsList({required String? apiKey}) =>
+  _i8.Future<_i3.OpenAiModels> getModelsList({required String? apiKey}) =>
       (super.noSuchMethod(
         Invocation.method(
           #getModelsList,
           [],
           {#apiKey: apiKey},
         ),
-        returnValue: _i7.Future<_i3.OpenAiModels>.value(_FakeOpenAiModels_2(
+        returnValue: _i8.Future<_i3.OpenAiModels>.value(_FakeOpenAiModels_2(
           this,
           Invocation.method(
             #getModelsList,
@@ -151,9 +182,9 @@ class MockOpenIAService extends _i1.Mock implements _i6.OpenIAService {
             {#apiKey: apiKey},
           ),
         )),
-      ) as _i7.Future<_i3.OpenAiModels>);
+      ) as _i8.Future<_i3.OpenAiModels>);
   @override
-  _i7.Future<_i3.EditsResponse> getEdits({
+  _i8.Future<_i3.EditsResponse> getEdits({
     required String? apiKey,
     required _i3.ConfigEdits? config,
     required Map<String, dynamic>? inputWithInstruction,
@@ -168,7 +199,7 @@ class MockOpenIAService extends _i1.Mock implements _i6.OpenIAService {
             #inputWithInstruction: inputWithInstruction,
           },
         ),
-        returnValue: _i7.Future<_i3.EditsResponse>.value(_FakeEditsResponse_3(
+        returnValue: _i8.Future<_i3.EditsResponse>.value(_FakeEditsResponse_3(
           this,
           Invocation.method(
             #getEdits,
@@ -180,11 +211,11 @@ class MockOpenIAService extends _i1.Mock implements _i6.OpenIAService {
             },
           ),
         )),
-      ) as _i7.Future<_i3.EditsResponse>);
+      ) as _i8.Future<_i3.EditsResponse>);
   @override
-  _i7.Future<_i4.ImagesResponse> generateImages({
+  _i8.Future<_i3.ImagesResponse> generateImages({
     required String? apiKey,
-    required _i8.ConfigImages? config,
+    required _i3.ConfigImages? config,
     required Map<String, dynamic>? prompt,
   }) =>
       (super.noSuchMethod(
@@ -197,7 +228,7 @@ class MockOpenIAService extends _i1.Mock implements _i6.OpenIAService {
             #prompt: prompt,
           },
         ),
-        returnValue: _i7.Future<_i4.ImagesResponse>.value(_FakeImagesResponse_4(
+        returnValue: _i8.Future<_i3.ImagesResponse>.value(_FakeImagesResponse_4(
           this,
           Invocation.method(
             #generateImages,
@@ -209,12 +240,12 @@ class MockOpenIAService extends _i1.Mock implements _i6.OpenIAService {
             },
           ),
         )),
-      ) as _i7.Future<_i4.ImagesResponse>);
+      ) as _i8.Future<_i3.ImagesResponse>);
   @override
-  _i7.Future<_i4.ImagesResponse> variateImage({
-    required _i9.File? image,
+  _i8.Future<_i3.ImagesResponse> variateImage({
+    required _i6.File? image,
     required String? apiKey,
-    required _i8.ConfigImages? config,
+    required _i3.ConfigImages? config,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -226,7 +257,7 @@ class MockOpenIAService extends _i1.Mock implements _i6.OpenIAService {
             #config: config,
           },
         ),
-        returnValue: _i7.Future<_i4.ImagesResponse>.value(_FakeImagesResponse_4(
+        returnValue: _i8.Future<_i3.ImagesResponse>.value(_FakeImagesResponse_4(
           this,
           Invocation.method(
             #variateImage,
@@ -238,14 +269,14 @@ class MockOpenIAService extends _i1.Mock implements _i6.OpenIAService {
             },
           ),
         )),
-      ) as _i7.Future<_i4.ImagesResponse>);
+      ) as _i8.Future<_i3.ImagesResponse>);
   @override
-  _i7.Future<_i4.ImagesResponse> editImage({
+  _i8.Future<_i3.ImagesResponse> editImage({
     required String? prompt,
-    required _i9.File? image,
-    _i9.File? mask,
+    required _i6.File? image,
+    _i6.File? mask,
     required String? apiKey,
-    required _i8.ConfigImages? config,
+    required _i3.ConfigImages? config,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -259,7 +290,7 @@ class MockOpenIAService extends _i1.Mock implements _i6.OpenIAService {
             #config: config,
           },
         ),
-        returnValue: _i7.Future<_i4.ImagesResponse>.value(_FakeImagesResponse_4(
+        returnValue: _i8.Future<_i3.ImagesResponse>.value(_FakeImagesResponse_4(
           this,
           Invocation.method(
             #editImage,
@@ -273,9 +304,9 @@ class MockOpenIAService extends _i1.Mock implements _i6.OpenIAService {
             },
           ),
         )),
-      ) as _i7.Future<_i4.ImagesResponse>);
+      ) as _i8.Future<_i3.ImagesResponse>);
   @override
-  _i7.Future<_i5.EmbeddingsResponse> createEmbedding({
+  _i8.Future<_i4.EmbeddingsResponse> createEmbedding({
     required String? apiKey,
     required Map<String, dynamic>? promptWithModel,
   }) =>
@@ -289,7 +320,7 @@ class MockOpenIAService extends _i1.Mock implements _i6.OpenIAService {
           },
         ),
         returnValue:
-            _i7.Future<_i5.EmbeddingsResponse>.value(_FakeEmbeddingsResponse_5(
+            _i8.Future<_i4.EmbeddingsResponse>.value(_FakeEmbeddingsResponse_5(
           this,
           Invocation.method(
             #createEmbedding,
@@ -300,5 +331,121 @@ class MockOpenIAService extends _i1.Mock implements _i6.OpenIAService {
             },
           ),
         )),
-      ) as _i7.Future<_i5.EmbeddingsResponse>);
+      ) as _i8.Future<_i4.EmbeddingsResponse>);
+  @override
+  _i8.Future<_i5.ListFileResponse> getFileList({required String? apiKey}) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getFileList,
+          [],
+          {#apiKey: apiKey},
+        ),
+        returnValue:
+            _i8.Future<_i5.ListFileResponse>.value(_FakeListFileResponse_6(
+          this,
+          Invocation.method(
+            #getFileList,
+            [],
+            {#apiKey: apiKey},
+          ),
+        )),
+      ) as _i8.Future<_i5.ListFileResponse>);
+  @override
+  _i8.Future<_i5.FileData> uploadFile({
+    required String? apiKey,
+    required _i6.File? file,
+    required String? purpose,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #uploadFile,
+          [],
+          {
+            #apiKey: apiKey,
+            #file: file,
+            #purpose: purpose,
+          },
+        ),
+        returnValue: _i8.Future<_i5.FileData>.value(_FakeFileData_7(
+          this,
+          Invocation.method(
+            #uploadFile,
+            [],
+            {
+              #apiKey: apiKey,
+              #file: file,
+              #purpose: purpose,
+            },
+          ),
+        )),
+      ) as _i8.Future<_i5.FileData>);
+  @override
+  _i8.Future<Map<String, dynamic>> deleteFile({
+    required String? fileId,
+    required String? apiKey,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #deleteFile,
+          [],
+          {
+            #fileId: fileId,
+            #apiKey: apiKey,
+          },
+        ),
+        returnValue:
+            _i8.Future<Map<String, dynamic>>.value(<String, dynamic>{}),
+      ) as _i8.Future<Map<String, dynamic>>);
+  @override
+  _i8.Future<_i5.FileData> retriveFile({
+    required String? fileId,
+    required String? apiKey,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #retriveFile,
+          [],
+          {
+            #fileId: fileId,
+            #apiKey: apiKey,
+          },
+        ),
+        returnValue: _i8.Future<_i5.FileData>.value(_FakeFileData_7(
+          this,
+          Invocation.method(
+            #retriveFile,
+            [],
+            {
+              #fileId: fileId,
+              #apiKey: apiKey,
+            },
+          ),
+        )),
+      ) as _i8.Future<_i5.FileData>);
+  @override
+  _i8.Future<_i6.File> retriveFileContent({
+    required String? fileId,
+    required String? apiKey,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #retriveFileContent,
+          [],
+          {
+            #fileId: fileId,
+            #apiKey: apiKey,
+          },
+        ),
+        returnValue: _i8.Future<_i6.File>.value(_FakeFile_8(
+          this,
+          Invocation.method(
+            #retriveFileContent,
+            [],
+            {
+              #fileId: fileId,
+              #apiKey: apiKey,
+            },
+          ),
+        )),
+      ) as _i8.Future<_i6.File>);
 }

@@ -33,10 +33,10 @@ class FileData {
   final int bytes;
   final int createdAt;
   final String filename;
-  final String poupose;
+  final String purpose;
 
   FileData(this.id, this.object, this.bytes, this.createdAt, this.filename,
-      this.poupose);
+      this.purpose);
 
   /// Converts the object to a Map<String, dynamic>
   Map<String, dynamic> toMap() {
@@ -46,7 +46,7 @@ class FileData {
       'bytes': bytes,
       'created_at': createdAt,
       'filename': filename,
-      'poupose': poupose,
+      'purpose': purpose,
     };
   }
 
@@ -58,7 +58,7 @@ class FileData {
       map['bytes'] as int,
       map['created_at'] as int,
       map['filename'] as String,
-      map['poupose'] as String,
+      map['purpose'] as String,
     );
   }
 }

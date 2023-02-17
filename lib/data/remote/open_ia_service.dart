@@ -8,6 +8,7 @@ import 'package:open_ai_simplified/data/infraestructure/url_builder.dart';
 import 'package:open_ai_simplified/domain/models/embeddings_response.dart';
 import 'package:open_ai_simplified/domain/models/list_file_response.dart';
 import 'package:open_ai_simplified/domain/models/models.dart';
+import 'package:path_provider/path_provider.dart';
 
 class OpenIAService {
   final Dio dio;
@@ -219,7 +220,8 @@ class OpenIAService {
       {required String fileId, required String apiKey}) async {
     final response = await dio.get(UrlBuilder.filePathWithIdNContent(fileId),
         options: Options(headers: {'Authorization': 'Bearer $apiKey'}));
-    final file = File('${Directory.systemTemp.path}/$fileId');
+    final path = await getTemporaryDirectory();
+    final file = File('$path/$fileId');
     await file.writeAsString(response.data);
     return file;
   }
