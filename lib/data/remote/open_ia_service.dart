@@ -5,8 +5,6 @@ import 'package:dio/dio.dart';
 import 'package:http_parser/http_parser.dart';
 
 import 'package:open_ai_simplified/data/infraestructure/url_builder.dart';
-import 'package:open_ai_simplified/domain/models/embeddings_response.dart';
-import 'package:open_ai_simplified/domain/models/list_file_response.dart';
 import 'package:open_ai_simplified/domain/models/models.dart';
 import 'package:open_ai_simplified/domain/models/moderation_response.dart';
 import 'package:path_provider/path_provider.dart';

@@ -1,4 +1,8 @@
-## 0.0.4
+## 0.0.6
+
+* Added moderation feature
+
+## 0.0.5
 
 * Added files feature
 
