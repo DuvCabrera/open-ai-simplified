@@ -5,6 +5,7 @@ import 'package:open_ai_simplified/data/remote/open_ia_service.dart';
 import 'package:open_ai_simplified/data/repositories/open_ai_repository.dart';
 import 'package:open_ai_simplified/domain/exceptions.dart';
 import 'package:open_ai_simplified/domain/models/embeddings_response.dart';
+import 'package:open_ai_simplified/domain/models/list_file_response.dart';
 import 'package:open_ai_simplified/domain/models/models.dart';
 
 import '../../utils.dart';
@@ -19,8 +20,12 @@ void main() {
   late Map<String, dynamic> mockEditsResponse;
   late Map<String, dynamic> mockImagesResponse;
   late Map<String, dynamic> mockEmbeddingResponse;
+  late Map<String, dynamic> mockFileListResponse;
+  late Map<String, dynamic> mockFileDataResponse;
 
   setUpAll(() {
+    mockFileDataResponse = Mocks.mockFileDataResponse;
+    mockFileListResponse = Mocks.mockListFileResponse;
     mockEmbeddingResponse = Mocks.mockEmbeddingsResponse;
     mockImagesResponse = Mocks.mockImagesResponse;
     mockEditsResponse = Mocks.mockEditsResponse;
@@ -422,6 +427,162 @@ void main() {
             EmbeddingsResponse.fromMap(mockEmbeddingResponse));
 
     final result = sut.createRawEmbedding(prompt: '');
+    expect(result, throwsA(isA<InvalidParamsException>()));
+    verifyNoMoreInteractions(openIAService);
+  });
+
+  test('getFileList should return a ListFileResponse object', () async {
+    when(openIAService.getFileList(apiKey: anyNamed('apiKey'))).thenAnswer(
+        (realInvocation) async =>
+            ListFileResponse.fromMap(mockFileListResponse));
+    final result = await sut.getFilesList();
+    expect(result, isA<ListFileResponse>());
+    verify(openIAService.getFileList(apiKey: anyNamed('apiKey'))).called(1);
+    verifyNoMoreInteractions(openIAService);
+  });
+
+  test(
+      'getFileList should throw KeyNotFoundException when the apiKey is empty or is not provided ',
+      () async {
+    when(openIAService.getFileList(apiKey: anyNamed('apiKey'))).thenAnswer(
+        (realInvocation) async =>
+            ListFileResponse.fromMap(mockFileListResponse));
+    sut.addApiKey('');
+    final result = sut.getFilesList();
+    expect(result, throwsA(isA<KeyNotFoundException>()));
+    verifyNoMoreInteractions(openIAService);
+  });
+
+  test('getRawFilesList should return a Map', () async {
+    when(openIAService.getFileList(apiKey: anyNamed('apiKey'))).thenAnswer(
+        (realInvocation) async =>
+            ListFileResponse.fromMap(mockFileListResponse));
+    final result = await sut.getRawFilesList();
+    expect(result, isA<Map>());
+    verify(openIAService.getFileList(apiKey: anyNamed('apiKey'))).called(1);
+    verifyNoMoreInteractions(openIAService);
+  });
+
+  test(
+      'getRawFilesList should throw KeyNotFoundException when the apiKey is empty or is not provided ',
+      () async {
+    when(openIAService.getFileList(apiKey: anyNamed('apiKey'))).thenAnswer(
+        (realInvocation) async =>
+            ListFileResponse.fromMap(mockFileListResponse));
+    sut.addApiKey('');
+    final result = sut.getRawFilesList();
+    expect(result, throwsA(isA<KeyNotFoundException>()));
+    verifyNoMoreInteractions(openIAService);
+  });
+
+  test('deleteFile should return a Map', () async {
+    when(openIAService.deleteFile(
+            apiKey: anyNamed('apiKey'), fileId: anyNamed('fileId')))
+        .thenAnswer((realInvocation) async => mockFileListResponse);
+    final result = await sut.deleteFile(fileId: 's');
+    expect(result, isA<Map>());
+    verify(openIAService.deleteFile(
+            apiKey: anyNamed('apiKey'), fileId: anyNamed('fileId')))
+        .called(1);
+    verifyNoMoreInteractions(openIAService);
+  });
+
+  test(
+      'deleteFile should throw KeyNotFoundException when the apiKey is empty or is not provided ',
+      () async {
+    when(openIAService.deleteFile(
+            apiKey: anyNamed('apiKey'), fileId: anyNamed('fileId')))
+        .thenAnswer((realInvocation) async => mockFileListResponse);
+    sut.addApiKey('');
+    final result = sut.deleteFile(fileId: 's');
+    expect(result, throwsA(isA<KeyNotFoundException>()));
+    verifyNoMoreInteractions(openIAService);
+  });
+
+  test('deleteFile should throw InvalidParamsException when fileId is empty ',
+      () async {
+    when(openIAService.deleteFile(
+            apiKey: anyNamed('apiKey'), fileId: anyNamed('fileId')))
+        .thenAnswer((realInvocation) async => mockFileListResponse);
+
+    final result = sut.deleteFile(fileId: '');
+    expect(result, throwsA(isA<InvalidParamsException>()));
+    verifyNoMoreInteractions(openIAService);
+  });
+
+  test('retriveRawFileInfo should return a Map', () async {
+    when(openIAService.retriveFile(
+            apiKey: anyNamed('apiKey'), fileId: anyNamed('fileId')))
+        .thenAnswer(
+            (realInvocation) async => FileData.fromMap(mockFileDataResponse));
+    final result = await sut.retriveRawFileInfo(fileId: 's');
+    expect(result, isA<Map>());
+    verify(openIAService.retriveFile(
+            apiKey: anyNamed('apiKey'), fileId: anyNamed('fileId')))
+        .called(1);
+    verifyNoMoreInteractions(openIAService);
+  });
+
+  test(
+      'retriveRawFileInfo should throw KeyNotFoundException when the apiKey is empty or is not provided ',
+      () async {
+    when(openIAService.retriveFile(
+            apiKey: anyNamed('apiKey'), fileId: anyNamed('fileId')))
+        .thenAnswer(
+            (realInvocation) async => FileData.fromMap(mockFileDataResponse));
+    sut.addApiKey('');
+    final result = sut.retriveRawFileInfo(fileId: 's');
+    expect(result, throwsA(isA<KeyNotFoundException>()));
+    verifyNoMoreInteractions(openIAService);
+  });
+
+  test(
+      'retriveRawFileInfo should throw InvalidParamsException when fileId is empty ',
+      () async {
+    when(openIAService.retriveFile(
+            apiKey: anyNamed('apiKey'), fileId: anyNamed('fileId')))
+        .thenAnswer(
+            (realInvocation) async => FileData.fromMap(mockFileDataResponse));
+
+    final result = sut.retriveRawFileInfo(fileId: '');
+    expect(result, throwsA(isA<InvalidParamsException>()));
+    verifyNoMoreInteractions(openIAService);
+  });
+  test('retriveFileInfo should return a FileData object', () async {
+    when(openIAService.retriveFile(
+            apiKey: anyNamed('apiKey'), fileId: anyNamed('fileId')))
+        .thenAnswer(
+            (realInvocation) async => FileData.fromMap(mockFileDataResponse));
+    final result = await sut.retriveFileInfo(fileId: 's');
+    expect(result, isA<FileData>());
+    verify(openIAService.retriveFile(
+            apiKey: anyNamed('apiKey'), fileId: anyNamed('fileId')))
+        .called(1);
+    verifyNoMoreInteractions(openIAService);
+  });
+
+  test(
+      'retriveFileInfo should throw KeyNotFoundException when the apiKey is empty or is not provided ',
+      () async {
+    when(openIAService.retriveFile(
+            apiKey: anyNamed('apiKey'), fileId: anyNamed('fileId')))
+        .thenAnswer(
+            (realInvocation) async => FileData.fromMap(mockFileDataResponse));
+    sut.addApiKey('');
+    final result = sut.retriveFileInfo(fileId: 's');
+    expect(result, throwsA(isA<KeyNotFoundException>()));
+    verifyNoMoreInteractions(openIAService);
+  });
+
+  test(
+      'retriveFileInfo should throw InvalidParamsException when fileId is empty ',
+      () async {
+    when(openIAService.retriveFile(
+            apiKey: anyNamed('apiKey'), fileId: anyNamed('fileId')))
+        .thenAnswer(
+            (realInvocation) async => FileData.fromMap(mockFileDataResponse));
+
+    final result = sut.retriveFileInfo(fileId: '');
     expect(result, throwsA(isA<InvalidParamsException>()));
     verifyNoMoreInteractions(openIAService);
   });

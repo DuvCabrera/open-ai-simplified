@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:open_ai_simplified/data/remote/open_ia_service.dart';
 import 'package:open_ai_simplified/domain/exceptions.dart';
 import 'package:open_ai_simplified/domain/models/embeddings_response.dart';
+import 'package:open_ai_simplified/domain/models/list_file_response.dart';
 import 'package:open_ai_simplified/domain/models/models.dart';
 
 class OpenIARepository {
@@ -171,76 +172,48 @@ class OpenIARepository {
   /// get a Completion as Map<String, dynamic>
   Future<Map<String, dynamic>> getRawCompletion(String prompt) async {
     try {
-      if (_apiKey.isEmpty) {
-        throw KeyNotFoundException();
-      }
-      if (prompt.isEmpty) {
-        throw InvalidParamsException();
-      }
+      _checkApi(values: [prompt]);
+
       final response = await service.getCompletion(
           prompt: prompt, apiKey: _apiKey, config: _configCompletion);
       return response.toMap();
     } catch (e) {
-      if (e is OpenAIException) {
-        rethrow;
-      } else {
-        throw Exception(e.toString());
-      }
+      throw _exceptionCheck(e);
     }
   }
 
   /// get a completion as CompletionResponse object
   Future<CompletionResponse> getCompletion(String prompt) async {
     try {
-      if (_apiKey.isEmpty) {
-        throw KeyNotFoundException();
-      }
-      if (prompt.isEmpty) {
-        throw InvalidParamsException();
-      }
+      _checkApi(values: [prompt]);
+
       final response = await service.getCompletion(
           prompt: prompt, apiKey: _apiKey, config: _configCompletion);
       return response;
     } catch (e) {
-      if (e is OpenAIException) {
-        rethrow;
-      } else {
-        throw Exception(e.toString());
-      }
+      throw _exceptionCheck(e);
     }
   }
 
   /// get a Models as Map<String, dynamic>
   Future<Map<String, dynamic>> getRawModelsList() async {
     try {
-      if (_apiKey.isEmpty) {
-        throw KeyNotFoundException();
-      }
+      _checkApi();
       final response = await service.getModelsList(apiKey: _apiKey);
       return response.toMap();
     } catch (e) {
-      if (e is OpenAIException) {
-        rethrow;
-      } else {
-        throw Exception(e.toString());
-      }
+      throw _exceptionCheck(e);
     }
   }
 
   /// get the Models as OpenAiModels object
   Future<OpenAiModels> getModelsList() async {
     try {
-      if (_apiKey.isEmpty) {
-        throw KeyNotFoundException();
-      }
+      _checkApi();
       final response = await service.getModelsList(apiKey: _apiKey);
       return response;
     } catch (e) {
-      if (e is OpenAIException) {
-        rethrow;
-      } else {
-        throw Exception(e.toString());
-      }
+      throw _exceptionCheck(e);
     }
   }
 
@@ -248,22 +221,14 @@ class OpenIARepository {
   Future<Map<String, dynamic>> getRawEdits(
       {required String input, required String instruction}) async {
     try {
-      if (_apiKey.isEmpty) {
-        throw KeyNotFoundException();
-      }
-      if (input.isEmpty || instruction.isEmpty) {
-        throw InvalidParamsException();
-      }
+      _checkApi(values: [input, instruction]);
+
       final map = {'input': input, 'instruction': instruction};
       final response = await service.getEdits(
           apiKey: _apiKey, config: _configEdits, inputWithInstruction: map);
       return response.toMap();
     } catch (e) {
-      if (e is OpenAIException) {
-        rethrow;
-      } else {
-        throw Exception(e.toString());
-      }
+      throw _exceptionCheck(e);
     }
   }
 
@@ -271,56 +236,36 @@ class OpenIARepository {
   Future<EditsResponse> getEdits(
       {required String input, required String instruction}) async {
     try {
-      if (_apiKey.isEmpty) {
-        throw KeyNotFoundException();
-      }
-      if (input.isEmpty || instruction.isEmpty) {
-        throw InvalidParamsException();
-      }
+      _checkApi(values: [input, instruction]);
+
       final map = {'input': input, 'instruction': instruction};
       final response = await service.getEdits(
           apiKey: _apiKey, config: _configEdits, inputWithInstruction: map);
       return response;
     } catch (e) {
-      if (e is OpenAIException) {
-        rethrow;
-      } else {
-        throw Exception(e.toString());
-      }
+      throw _exceptionCheck(e);
     }
   }
 
   /// get Images as Map<String, dynamic>
   Future<Map<String, dynamic>> getRawImages(String prompt) async {
     try {
-      if (_apiKey.isEmpty) {
-        throw KeyNotFoundException();
-      }
-      if (prompt.isEmpty) {
-        throw InvalidParamsException();
-      }
+      _checkApi(values: [prompt]);
+
       final map = {'prompt': prompt};
       final result = await service.generateImages(
           apiKey: _apiKey, config: _configImages, prompt: map);
       return result.toMap();
     } catch (e) {
-      if (e is OpenAIException) {
-        rethrow;
-      } else {
-        throw Exception(e.toString());
-      }
+      throw _exceptionCheck(e);
     }
   }
 
   /// get Images as ImagesResponse object
   Future<ImagesResponse> getImages(String prompt) async {
     try {
-      if (_apiKey.isEmpty) {
-        throw KeyNotFoundException();
-      }
-      if (prompt.isEmpty) {
-        throw InvalidParamsException();
-      }
+      _checkApi(values: [prompt]);
+
       final map = {'prompt': prompt};
       final result = await service.generateImages(
           apiKey: _apiKey, config: _configImages, prompt: map);
@@ -338,9 +283,7 @@ class OpenIARepository {
   Future<ImagesResponse> createAImageVariation(
       {required File imageFile}) async {
     try {
-      if (_apiKey.isEmpty) {
-        throw KeyNotFoundException();
-      }
+      _checkApi();
 
       final result = await service.variateImage(
           image: imageFile, apiKey: _apiKey, config: _configImages);
@@ -358,19 +301,13 @@ class OpenIARepository {
   Future<Map<String, dynamic>> createRawImageVariation(
       {required File imageFile}) async {
     try {
-      if (_apiKey.isEmpty) {
-        throw KeyNotFoundException();
-      }
+      _checkApi();
 
       final result = await service.variateImage(
           image: imageFile, apiKey: _apiKey, config: _configImages);
       return result.toMap();
     } catch (e) {
-      if (e is OpenAIException) {
-        rethrow;
-      } else {
-        throw Exception(e.toString());
-      }
+      throw _exceptionCheck(e);
     }
   }
 
@@ -384,12 +321,8 @@ class OpenIARepository {
     required String prompt,
   }) async {
     try {
-      if (_apiKey.isEmpty) {
-        throw KeyNotFoundException();
-      }
-      if (prompt.isEmpty) {
-        throw InvalidParamsException();
-      }
+      _checkApi(values: [prompt]);
+
       final result = await service.editImage(
           prompt: prompt,
           image: image,
@@ -398,11 +331,7 @@ class OpenIARepository {
           mask: mask);
       return result;
     } catch (e) {
-      if (e is OpenAIException) {
-        rethrow;
-      } else {
-        throw Exception(e.toString());
-      }
+      throw _exceptionCheck(e);
     }
   }
 
@@ -415,21 +344,13 @@ class OpenIARepository {
     required String prompt,
   }) async {
     try {
-      if (_apiKey.isEmpty) {
-        throw KeyNotFoundException();
-      }
-      if (prompt.isEmpty) {
-        throw InvalidParamsException();
-      }
+      _checkApi(values: [prompt]);
+
       final result = await service.editImage(
           prompt: prompt, image: image, apiKey: _apiKey, config: _configImages);
       return result.toMap();
     } catch (e) {
-      if (e is OpenAIException) {
-        rethrow;
-      } else {
-        throw Exception(e.toString());
-      }
+      throw _exceptionCheck(e);
     }
   }
 
@@ -437,45 +358,145 @@ class OpenIARepository {
   Future<Map<String, dynamic>> createRawEmbedding(
       {required String prompt}) async {
     try {
-      _checkApi([prompt]);
+      _checkApi(values: [prompt]);
+
       final map = {'model': _configEmbedding.model, 'input': prompt};
       final result =
           await service.createEmbedding(apiKey: _apiKey, promptWithModel: map);
       return result.toMap();
     } catch (e) {
-      if (e is OpenAIException) {
-        rethrow;
-      } else {
-        throw Exception(e.toString());
-      }
+      throw _exceptionCheck(e);
     }
   }
 
   /// Creates an embedding vector representing the input text. returns it as a EmbeddingsResponse object
   Future<EmbeddingsResponse> createEmbedding({required String prompt}) async {
     try {
-      _checkApi([prompt]);
+      _checkApi(values: [prompt]);
       final map = {'model': _configEmbedding.model, 'input': prompt};
       final result =
           await service.createEmbedding(apiKey: _apiKey, promptWithModel: map);
       return result;
     } catch (e) {
-      if (e is OpenAIException) {
-        rethrow;
-      } else {
-        throw Exception(e.toString());
-      }
+      throw _exceptionCheck(e);
+    }
+  }
+
+  /// Retrives the list of stored files as ListFileResponse object.
+  Future<ListFileResponse> getFilesList() async {
+    try {
+      _checkApi();
+      final result = await service.getFileList(apiKey: _apiKey);
+      return result;
+    } catch (e) {
+      throw _exceptionCheck(e);
+    }
+  }
+
+  /// Retrives the list of stored files as Map.
+  Future<Map<String, dynamic>> getRawFilesList() async {
+    try {
+      _checkApi();
+      final result = await service.getFileList(apiKey: _apiKey);
+      return result.toMap();
+    } catch (e) {
+      throw _exceptionCheck(e);
+    }
+  }
+
+  /// Upload an file with some purpouse ex: fine-tune, search.
+  Future<FileData> uploadFile(
+      {required File file, required String purpose}) async {
+    try {
+      _checkApi(values: [purpose]);
+      final result = await service.uploadFile(
+          apiKey: _apiKey, file: file, purpose: purpose);
+
+      return result;
+    } catch (e) {
+      throw _exceptionCheck(e);
+    }
+  }
+
+  /// Upload an file with some purpouse ex: fine-tune, search. returns a Map
+  Future<Map<String, dynamic>> uploadFileReturningAMap(
+      {required File file, required String purpose}) async {
+    try {
+      _checkApi(values: [purpose]);
+      final result = await service.uploadFile(
+          apiKey: _apiKey, file: file, purpose: purpose);
+
+      return result.toMap();
+    } catch (e) {
+      throw _exceptionCheck(e);
+    }
+  }
+
+  /// Delete a file
+  Future<Map<String, dynamic>> deleteFile({required String fileId}) async {
+    try {
+      _checkApi(values: [fileId]);
+      final result = await service.deleteFile(fileId: fileId, apiKey: _apiKey);
+      return result;
+    } catch (e) {
+      throw _exceptionCheck(e);
+    }
+  }
+
+  /// Returns information about a specific file as FileData
+  Future<FileData> retriveFileInfo({required String fileId}) async {
+    try {
+      _checkApi(values: [fileId]);
+      final result = await service.retriveFile(fileId: fileId, apiKey: _apiKey);
+      return result;
+    } catch (e) {
+      throw _exceptionCheck(e);
+    }
+  }
+
+  /// Returns information about a specific file as Map
+  Future<Map<String, dynamic>> retriveRawFileInfo(
+      {required String fileId}) async {
+    try {
+      _checkApi(values: [fileId]);
+      final result = await service.retriveFile(fileId: fileId, apiKey: _apiKey);
+      return result.toMap();
+    } catch (e) {
+      throw _exceptionCheck(e);
+    }
+  }
+
+  /// Returns the contents of the specified file.
+  Future<File> retriveFileContent({required String fileId}) async {
+    try {
+      _checkApi(values: [fileId]);
+      final result =
+          await service.retriveFileContent(fileId: fileId, apiKey: _apiKey);
+      return result;
+    } catch (e) {
+      throw _exceptionCheck(e);
+    }
+  }
+
+  /// check if the error is an OpenAiException then throw
+  _exceptionCheck(Object e) {
+    if (e is OpenAIException) {
+      throw e;
+    } else {
+      throw Exception(e.toString());
     }
   }
 
   /// checks if the prerequisites are valid
-  void _checkApi(List<String> values) {
+  void _checkApi({List<String>? values}) {
     if (_apiKey.isEmpty) {
       throw KeyNotFoundException();
     }
-    for (var item in values) {
-      if (item.isEmpty) {
-        throw InvalidParamsException();
+    if (values != null) {
+      for (var item in values) {
+        if (item.isEmpty) {
+          throw InvalidParamsException();
+        }
       }
     }
   }
