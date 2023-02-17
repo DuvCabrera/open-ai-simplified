@@ -3,9 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:open_ai_simplified/data/remote/open_ia_service.dart';
-import 'package:open_ai_simplified/domain/models/embeddings_response.dart';
-import 'package:open_ai_simplified/domain/models/list_file_response.dart';
 import 'package:open_ai_simplified/domain/models/models.dart';
+import 'package:open_ai_simplified/domain/models/moderation_response.dart';
 
 import '../../utils.dart';
 import 'open_ia_service_test.mocks.dart';
@@ -21,9 +20,11 @@ void main() {
   late Map<String, dynamic> mockEmbeddingResponse;
   late Map<String, dynamic> mockFileListResponse;
   late Map<String, dynamic> mockFileDataResponse;
+  late Map<String, dynamic> mockModerationResponse;
 
   setUp(() => sut = OpenIAService(dio));
   setUpAll(() {
+    mockModerationResponse = Mocks.mockModerationResponse;
     mockFileDataResponse = Mocks.mockFileDataResponse;
     mockFileListResponse = Mocks.mockListFileResponse;
     mockEmbeddingResponse = Mocks.mockEmbeddingsResponse;
@@ -136,6 +137,19 @@ void main() {
       any,
       options: anyNamed('options'),
     )).called(1);
+    verifyNoMoreInteractions(dio);
+  });
+
+  test('checkModeration should return a ModerationResponse object', () async {
+    when(dio.post(any, options: anyNamed('options'), data: anyNamed('data')))
+        .thenAnswer((realInvocation) async => Response(
+            requestOptions: RequestOptions(path: ''),
+            data: mockModerationResponse));
+
+    final response = await sut.checkModeration(input: {}, apiKey: 'apiKey');
+    expect(response, isA<ModerationResponse>());
+    verify(dio.post(any, options: anyNamed('options'), data: anyNamed('data')))
+        .called(1);
     verifyNoMoreInteractions(dio);
   });
 }

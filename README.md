@@ -38,7 +38,7 @@ Images      | ✅
 Embeddings  | ✅
 Files       | ✅
 Fine-tunes  | ❌
-Moderations | ❌
+Moderations | ✅
 
 ## Getting started
 
@@ -133,6 +133,13 @@ void main() async {
 
   /// print the content
   log(fileContent.toString());
+
+  /// Classifies if text violates OpenAI's Content Policy, returns ModerationResponse object
+  final moderationInfo =
+      await openAi.moderationCheck(input: 'I want to kill them.');
+
+  /// print moderation info
+  log(moderationInfo.results[0].categories.toString());
 }
 
 Future<File> downloadFile(String url) async {

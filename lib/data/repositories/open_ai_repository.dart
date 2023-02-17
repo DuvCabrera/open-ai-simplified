@@ -3,9 +3,8 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:open_ai_simplified/data/remote/open_ia_service.dart';
 import 'package:open_ai_simplified/domain/exceptions.dart';
-import 'package:open_ai_simplified/domain/models/embeddings_response.dart';
-import 'package:open_ai_simplified/domain/models/list_file_response.dart';
 import 'package:open_ai_simplified/domain/models/models.dart';
+import 'package:open_ai_simplified/domain/models/moderation_response.dart';
 
 class OpenIARepository {
   OpenIARepository({
@@ -473,6 +472,31 @@ class OpenIARepository {
       final result =
           await service.retriveFileContent(fileId: fileId, apiKey: _apiKey);
       return result;
+    } catch (e) {
+      throw _exceptionCheck(e);
+    }
+  }
+
+  /// Classifies if text violates OpenAI's Content Policy, returns ModerationResponse object
+  Future<ModerationResponse> moderationCheck({required String input}) async {
+    try {
+      _checkApi(values: [input]);
+      final map = {'input': input};
+      final result = await service.checkModeration(input: map, apiKey: _apiKey);
+      return result;
+    } catch (e) {
+      throw _exceptionCheck(e);
+    }
+  }
+
+  /// Classifies if text violates OpenAI's Content Policy, returns a Map
+  Future<Map<String, dynamic>> rawModerationCheck(
+      {required String input}) async {
+    try {
+      _checkApi(values: [input]);
+      final map = {'input': input};
+      final result = await service.checkModeration(input: map, apiKey: _apiKey);
+      return result.toMap();
     } catch (e) {
       throw _exceptionCheck(e);
     }
