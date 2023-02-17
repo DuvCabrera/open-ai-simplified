@@ -7,6 +7,8 @@ class UrlBuilder {
   static const String _generations = 'generations';
   static const String _variations = 'variations';
   static const String _embeddings = 'embeddings';
+  static const String _files = 'files';
+  static const String _content = 'content';
 
   static const String completionsPath = _baseUrl + _completions;
   static const String modelsPath = _baseUrl + _models;
@@ -15,4 +17,8 @@ class UrlBuilder {
   static const String imagesVariationsPath = _baseUrl + _images + _variations;
   static const String imagesEditsPath = _baseUrl + _images + _edits;
   static const String embeddingsPath = _baseUrl + _embeddings;
+  static const String filesPath = _baseUrl + _files;
+  static String filePathWithId(String fileId) => '$filesPath/$fileId';
+  static String filePathWithIdNContent(String fileId) =>
+      '$filesPath/$fileId/$_content';
 }

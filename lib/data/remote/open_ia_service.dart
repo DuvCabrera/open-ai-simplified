@@ -6,7 +6,9 @@ import 'package:http_parser/http_parser.dart';
 
 import 'package:open_ai_simplified/data/infraestructure/url_builder.dart';
 import 'package:open_ai_simplified/domain/models/embeddings_response.dart';
+import 'package:open_ai_simplified/domain/models/list_file_response.dart';
 import 'package:open_ai_simplified/domain/models/models.dart';
+import 'package:path_provider/path_provider.dart';
 
 class OpenIAService {
   final Dio dio;
@@ -161,5 +163,66 @@ class OpenIAService {
           'Authorization': 'Bearer $apiKey'
         }));
     return EmbeddingsResponse.fromMap(response.data);
+  }
+
+  /// Retrives the list of stored files
+  Future<ListFileResponse> getFileList({required String apiKey}) async {
+    final response = await dio.get(UrlBuilder.filesPath,
+        options: Options(headers: {'Authorization': 'Bearer $apiKey'}));
+    return ListFileResponse.fromMap(response.data);
+  }
+
+  /// Upload a file that contains document(s) to be used across various endpoints/features.
+  /// Currently, the size of all the files uploaded by one organization can be up to 1 GB.
+  Future<FileData> uploadFile(
+      {required String apiKey,
+      required File file,
+      required String purpose}) async {
+    final formData = FormData.fromMap({
+      'purpose': purpose,
+      'file': await MultipartFile.fromFile(file.path),
+    });
+    final response = await dio.post(UrlBuilder.filesPath,
+        data: formData,
+        options: Options(headers: {
+          'Content-Type': 'multpart/form-data',
+          'Authorization': 'Bearer $apiKey'
+        }));
+
+    return FileData.fromMap(response.data);
+  }
+
+  /// Delete a file.
+  Future<Map<String, dynamic>> deleteFile(
+      {required String fileId, required String apiKey}) async {
+    final response = await dio.delete(UrlBuilder.filePathWithId(fileId),
+        options: Options(headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $apiKey'
+        }));
+    return response.data;
+  }
+
+  /// Returns information about a specific file.
+  Future<FileData> retriveFile(
+      {required String fileId, required String apiKey}) async {
+    final response = await dio.get(UrlBuilder.filePathWithId(fileId),
+        options: Options(headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $apiKey'
+        }));
+
+    return FileData.fromMap(response.data);
+  }
+
+  /// Returns the contents of the specified file.
+  Future<File> retriveFileContent(
+      {required String fileId, required String apiKey}) async {
+    final response = await dio.get(UrlBuilder.filePathWithIdNContent(fileId),
+        options: Options(headers: {'Authorization': 'Bearer $apiKey'}));
+    final path = await getTemporaryDirectory();
+    final file = File('$path/$fileId');
+    await file.writeAsString(response.data);
+    return file;
   }
 }
