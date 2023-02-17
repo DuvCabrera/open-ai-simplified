@@ -404,6 +404,10 @@ class OpenIARepository {
   }
 
   /// Upload an file with some purpouse ex: fine-tune, search.
+  /// the model to updated file, its need to be a JsonL, a json that contains a json with prompt and conpletion map in every line
+  /// {"prompt": "<prompt text>", "completion": "<ideal generated text>"}
+  /// {"prompt": "<prompt text>", "completion": "<ideal generated text>"}
+  /// {"prompt": "<prompt text>", "completion": "<ideal generated text>"}
   Future<FileData> uploadFile(
       {required File file, required String purpose}) async {
     try {
@@ -418,6 +422,10 @@ class OpenIARepository {
   }
 
   /// Upload an file with some purpouse ex: fine-tune, search. returns a Map
+  /// the model to updated file, its need to be a JsonL, a json that contains a json with prompt and conpletion map in every line
+  /// {"prompt": "<prompt text>", "completion": "<ideal generated text>"}
+  /// {"prompt": "<prompt text>", "completion": "<ideal generated text>"}
+  /// {"prompt": "<prompt text>", "completion": "<ideal generated text>"}
   Future<Map<String, dynamic>> uploadFileReturningAMap(
       {required File file, required String purpose}) async {
     try {

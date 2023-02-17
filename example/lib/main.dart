@@ -84,6 +84,11 @@ void main() async {
 
   /// Upload a file that contains document(s) to be used across various endpoints/features.
   ///  Currently, the size of all the files uploaded by one organization can be up to 1 GB.
+  /// the model to updated file, its need to be a JsonL, a json that contains a json with prompt and conpletion map in every line
+  /// {"prompt": "<prompt text>", "completion": "<ideal generated text>"}
+  /// {"prompt": "<prompt text>", "completion": "<ideal generated text>"}
+  /// {"prompt": "<prompt text>", "completion": "<ideal generated text>"}
+
   final uploadedFile = await openAi.uploadFile(
       file: File('director/xxx.jsonl'), purpose: 'fine-tune');
 

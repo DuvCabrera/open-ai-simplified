@@ -10,6 +10,8 @@ class UrlBuilder {
   static const String _files = 'files';
   static const String _content = 'content';
   static const String _moderations = 'moderations';
+  static const String _fineTunes = 'fine-tunes';
+  static const String _cancel = 'cancel';
 
   static const String completionsPath = _baseUrl + _completions;
   static const String modelsPath = _baseUrl + _models;
@@ -20,7 +22,14 @@ class UrlBuilder {
   static const String embeddingsPath = _baseUrl + _embeddings;
   static const String filesPath = _baseUrl + _files;
   static const String moderationsPath = _baseUrl + _moderations;
+  static const String fineTunesPath = _baseUrl + _fineTunes;
   static String filePathWithId(String fileId) => '$filesPath/$fileId';
   static String filePathWithIdNContent(String fileId) =>
       '$filesPath/$fileId/$_content';
+  static String fineTunesPathWithId(String fineTuneId) =>
+      '$fineTunesPath/$fineTuneId';
+  static String fineTunesPathWithIdNCancel(String fineTuneId) =>
+      '$fineTunesPath/$fineTuneId/$_cancel';
+  static String fineTunesDeletePathWithIdModel(String model) =>
+      '$modelsPath/$model';
 }
