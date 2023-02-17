@@ -4,9 +4,8 @@ import 'package:mockito/mockito.dart';
 import 'package:open_ai_simplified/data/remote/open_ia_service.dart';
 import 'package:open_ai_simplified/data/repositories/open_ai_repository.dart';
 import 'package:open_ai_simplified/domain/exceptions.dart';
-import 'package:open_ai_simplified/domain/models/embeddings_response.dart';
-import 'package:open_ai_simplified/domain/models/list_file_response.dart';
 import 'package:open_ai_simplified/domain/models/models.dart';
+import 'package:open_ai_simplified/domain/models/moderation_response.dart';
 
 import '../../utils.dart';
 import 'open_ai_repository_test.mocks.dart';
@@ -22,8 +21,10 @@ void main() {
   late Map<String, dynamic> mockEmbeddingResponse;
   late Map<String, dynamic> mockFileListResponse;
   late Map<String, dynamic> mockFileDataResponse;
+  late Map<String, dynamic> mockModerationResponse;
 
   setUpAll(() {
+    mockModerationResponse = Mocks.mockModerationResponse;
     mockFileDataResponse = Mocks.mockFileDataResponse;
     mockFileListResponse = Mocks.mockListFileResponse;
     mockEmbeddingResponse = Mocks.mockEmbeddingsResponse;
@@ -583,6 +584,45 @@ void main() {
             (realInvocation) async => FileData.fromMap(mockFileDataResponse));
 
     final result = sut.retriveFileInfo(fileId: '');
+    expect(result, throwsA(isA<InvalidParamsException>()));
+    verifyNoMoreInteractions(openIAService);
+  });
+
+  test('moderationCheck should return a ModerationResponse object', () async {
+    when(openIAService.checkModeration(
+            input: anyNamed('input'), apiKey: anyNamed('apiKey')))
+        .thenAnswer((realInvocation) async =>
+            ModerationResponse.fromMap(mockModerationResponse));
+    final result = await sut.moderationCheck(input: 'input');
+    expect(result, isA<ModerationResponse>());
+    verify(openIAService.checkModeration(
+            input: anyNamed('input'), apiKey: anyNamed('apiKey')))
+        .called(1);
+    verifyNoMoreInteractions(openIAService);
+  });
+
+  test(
+      'moderationCheck should throw a KeyNotFoundException when the apiKey is empty or is not provided ',
+      () async {
+    when(openIAService.checkModeration(
+            input: anyNamed('input'), apiKey: anyNamed('apiKey')))
+        .thenAnswer((realInvocation) async =>
+            ModerationResponse.fromMap(mockModerationResponse));
+    sut.addApiKey('');
+    final result = sut.moderationCheck(input: 'input');
+    expect(result, throwsA(isA<KeyNotFoundException>()));
+    verifyNoMoreInteractions(openIAService);
+  });
+
+  test(
+      'moderationCheck should throw a InvalidParamsException when input is empty ',
+      () async {
+    when(openIAService.checkModeration(
+            input: anyNamed('input'), apiKey: anyNamed('apiKey')))
+        .thenAnswer((realInvocation) async =>
+            ModerationResponse.fromMap(mockModerationResponse));
+
+    final result = sut.moderationCheck(input: '');
     expect(result, throwsA(isA<InvalidParamsException>()));
     verifyNoMoreInteractions(openIAService);
   });

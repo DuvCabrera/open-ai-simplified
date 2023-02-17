@@ -36,7 +36,7 @@ class Results {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'categories': categories,
-      'categoryScores': categoryScores,
+      'category_scores': categoryScores,
       'flagged': flagged,
     };
   }
@@ -45,7 +45,7 @@ class Results {
     return Results(
       Map<String, dynamic>.from((map['categories'] as Map<String, dynamic>)),
       Map<String, dynamic>.from(
-          (map['categoryScores'] as Map<String, dynamic>)),
+          (map['category_scores'] as Map<String, dynamic>)),
       map['flagged'] as bool,
     );
   }

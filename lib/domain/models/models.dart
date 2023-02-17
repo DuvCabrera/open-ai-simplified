@@ -8,3 +8,4 @@ export 'config_embedding.dart';
 export 'images_response.dart';
 export 'config_images.dart';
 export 'list_file_response.dart';
+export 'embeddings_response.dart';
