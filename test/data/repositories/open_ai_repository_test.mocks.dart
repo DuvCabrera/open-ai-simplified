@@ -3,17 +3,19 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i8;
+import 'dart:async' as _i9;
 import 'dart:io' as _i6;
 
 import 'package:dio/dio.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:open_ai_simplified/data/remote/open_ia_service.dart' as _i7;
+import 'package:open_ai_simplified/data/remote/open_ia_service.dart' as _i8;
 import 'package:open_ai_simplified/domain/models/embeddings_response.dart'
     as _i4;
 import 'package:open_ai_simplified/domain/models/list_file_response.dart'
     as _i5;
 import 'package:open_ai_simplified/domain/models/models.dart' as _i3;
+import 'package:open_ai_simplified/domain/models/moderation_response.dart'
+    as _i7;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -120,10 +122,21 @@ class _FakeFile_8 extends _i1.SmartFake implements _i6.File {
         );
 }
 
+class _FakeModerationResponse_9 extends _i1.SmartFake
+    implements _i7.ModerationResponse {
+  _FakeModerationResponse_9(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
 /// A class which mocks [OpenIAService].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockOpenIAService extends _i1.Mock implements _i7.OpenIAService {
+class MockOpenIAService extends _i1.Mock implements _i8.OpenIAService {
   MockOpenIAService() {
     _i1.throwOnMissingStub(this);
   }
@@ -137,7 +150,7 @@ class MockOpenIAService extends _i1.Mock implements _i7.OpenIAService {
         ),
       ) as _i2.Dio);
   @override
-  _i8.Future<_i3.CompletionResponse> getCompletion({
+  _i9.Future<_i3.CompletionResponse> getCompletion({
     required String? prompt,
     required String? apiKey,
     required _i3.ConfigCompletion? config,
@@ -153,7 +166,7 @@ class MockOpenIAService extends _i1.Mock implements _i7.OpenIAService {
           },
         ),
         returnValue:
-            _i8.Future<_i3.CompletionResponse>.value(_FakeCompletionResponse_1(
+            _i9.Future<_i3.CompletionResponse>.value(_FakeCompletionResponse_1(
           this,
           Invocation.method(
             #getCompletion,
@@ -165,16 +178,16 @@ class MockOpenIAService extends _i1.Mock implements _i7.OpenIAService {
             },
           ),
         )),
-      ) as _i8.Future<_i3.CompletionResponse>);
+      ) as _i9.Future<_i3.CompletionResponse>);
   @override
-  _i8.Future<_i3.OpenAiModels> getModelsList({required String? apiKey}) =>
+  _i9.Future<_i3.OpenAiModels> getModelsList({required String? apiKey}) =>
       (super.noSuchMethod(
         Invocation.method(
           #getModelsList,
           [],
           {#apiKey: apiKey},
         ),
-        returnValue: _i8.Future<_i3.OpenAiModels>.value(_FakeOpenAiModels_2(
+        returnValue: _i9.Future<_i3.OpenAiModels>.value(_FakeOpenAiModels_2(
           this,
           Invocation.method(
             #getModelsList,
@@ -182,9 +195,9 @@ class MockOpenIAService extends _i1.Mock implements _i7.OpenIAService {
             {#apiKey: apiKey},
           ),
         )),
-      ) as _i8.Future<_i3.OpenAiModels>);
+      ) as _i9.Future<_i3.OpenAiModels>);
   @override
-  _i8.Future<_i3.EditsResponse> getEdits({
+  _i9.Future<_i3.EditsResponse> getEdits({
     required String? apiKey,
     required _i3.ConfigEdits? config,
     required Map<String, dynamic>? inputWithInstruction,
@@ -199,7 +212,7 @@ class MockOpenIAService extends _i1.Mock implements _i7.OpenIAService {
             #inputWithInstruction: inputWithInstruction,
           },
         ),
-        returnValue: _i8.Future<_i3.EditsResponse>.value(_FakeEditsResponse_3(
+        returnValue: _i9.Future<_i3.EditsResponse>.value(_FakeEditsResponse_3(
           this,
           Invocation.method(
             #getEdits,
@@ -211,9 +224,9 @@ class MockOpenIAService extends _i1.Mock implements _i7.OpenIAService {
             },
           ),
         )),
-      ) as _i8.Future<_i3.EditsResponse>);
+      ) as _i9.Future<_i3.EditsResponse>);
   @override
-  _i8.Future<_i3.ImagesResponse> generateImages({
+  _i9.Future<_i3.ImagesResponse> generateImages({
     required String? apiKey,
     required _i3.ConfigImages? config,
     required Map<String, dynamic>? prompt,
@@ -228,7 +241,7 @@ class MockOpenIAService extends _i1.Mock implements _i7.OpenIAService {
             #prompt: prompt,
           },
         ),
-        returnValue: _i8.Future<_i3.ImagesResponse>.value(_FakeImagesResponse_4(
+        returnValue: _i9.Future<_i3.ImagesResponse>.value(_FakeImagesResponse_4(
           this,
           Invocation.method(
             #generateImages,
@@ -240,9 +253,9 @@ class MockOpenIAService extends _i1.Mock implements _i7.OpenIAService {
             },
           ),
         )),
-      ) as _i8.Future<_i3.ImagesResponse>);
+      ) as _i9.Future<_i3.ImagesResponse>);
   @override
-  _i8.Future<_i3.ImagesResponse> variateImage({
+  _i9.Future<_i3.ImagesResponse> variateImage({
     required _i6.File? image,
     required String? apiKey,
     required _i3.ConfigImages? config,
@@ -257,7 +270,7 @@ class MockOpenIAService extends _i1.Mock implements _i7.OpenIAService {
             #config: config,
           },
         ),
-        returnValue: _i8.Future<_i3.ImagesResponse>.value(_FakeImagesResponse_4(
+        returnValue: _i9.Future<_i3.ImagesResponse>.value(_FakeImagesResponse_4(
           this,
           Invocation.method(
             #variateImage,
@@ -269,9 +282,9 @@ class MockOpenIAService extends _i1.Mock implements _i7.OpenIAService {
             },
           ),
         )),
-      ) as _i8.Future<_i3.ImagesResponse>);
+      ) as _i9.Future<_i3.ImagesResponse>);
   @override
-  _i8.Future<_i3.ImagesResponse> editImage({
+  _i9.Future<_i3.ImagesResponse> editImage({
     required String? prompt,
     required _i6.File? image,
     _i6.File? mask,
@@ -290,7 +303,7 @@ class MockOpenIAService extends _i1.Mock implements _i7.OpenIAService {
             #config: config,
           },
         ),
-        returnValue: _i8.Future<_i3.ImagesResponse>.value(_FakeImagesResponse_4(
+        returnValue: _i9.Future<_i3.ImagesResponse>.value(_FakeImagesResponse_4(
           this,
           Invocation.method(
             #editImage,
@@ -304,9 +317,9 @@ class MockOpenIAService extends _i1.Mock implements _i7.OpenIAService {
             },
           ),
         )),
-      ) as _i8.Future<_i3.ImagesResponse>);
+      ) as _i9.Future<_i3.ImagesResponse>);
   @override
-  _i8.Future<_i4.EmbeddingsResponse> createEmbedding({
+  _i9.Future<_i4.EmbeddingsResponse> createEmbedding({
     required String? apiKey,
     required Map<String, dynamic>? promptWithModel,
   }) =>
@@ -320,7 +333,7 @@ class MockOpenIAService extends _i1.Mock implements _i7.OpenIAService {
           },
         ),
         returnValue:
-            _i8.Future<_i4.EmbeddingsResponse>.value(_FakeEmbeddingsResponse_5(
+            _i9.Future<_i4.EmbeddingsResponse>.value(_FakeEmbeddingsResponse_5(
           this,
           Invocation.method(
             #createEmbedding,
@@ -331,9 +344,9 @@ class MockOpenIAService extends _i1.Mock implements _i7.OpenIAService {
             },
           ),
         )),
-      ) as _i8.Future<_i4.EmbeddingsResponse>);
+      ) as _i9.Future<_i4.EmbeddingsResponse>);
   @override
-  _i8.Future<_i5.ListFileResponse> getFileList({required String? apiKey}) =>
+  _i9.Future<_i5.ListFileResponse> getFileList({required String? apiKey}) =>
       (super.noSuchMethod(
         Invocation.method(
           #getFileList,
@@ -341,7 +354,7 @@ class MockOpenIAService extends _i1.Mock implements _i7.OpenIAService {
           {#apiKey: apiKey},
         ),
         returnValue:
-            _i8.Future<_i5.ListFileResponse>.value(_FakeListFileResponse_6(
+            _i9.Future<_i5.ListFileResponse>.value(_FakeListFileResponse_6(
           this,
           Invocation.method(
             #getFileList,
@@ -349,9 +362,9 @@ class MockOpenIAService extends _i1.Mock implements _i7.OpenIAService {
             {#apiKey: apiKey},
           ),
         )),
-      ) as _i8.Future<_i5.ListFileResponse>);
+      ) as _i9.Future<_i5.ListFileResponse>);
   @override
-  _i8.Future<_i5.FileData> uploadFile({
+  _i9.Future<_i5.FileData> uploadFile({
     required String? apiKey,
     required _i6.File? file,
     required String? purpose,
@@ -366,7 +379,7 @@ class MockOpenIAService extends _i1.Mock implements _i7.OpenIAService {
             #purpose: purpose,
           },
         ),
-        returnValue: _i8.Future<_i5.FileData>.value(_FakeFileData_7(
+        returnValue: _i9.Future<_i5.FileData>.value(_FakeFileData_7(
           this,
           Invocation.method(
             #uploadFile,
@@ -378,9 +391,9 @@ class MockOpenIAService extends _i1.Mock implements _i7.OpenIAService {
             },
           ),
         )),
-      ) as _i8.Future<_i5.FileData>);
+      ) as _i9.Future<_i5.FileData>);
   @override
-  _i8.Future<Map<String, dynamic>> deleteFile({
+  _i9.Future<Map<String, dynamic>> deleteFile({
     required String? fileId,
     required String? apiKey,
   }) =>
@@ -394,10 +407,10 @@ class MockOpenIAService extends _i1.Mock implements _i7.OpenIAService {
           },
         ),
         returnValue:
-            _i8.Future<Map<String, dynamic>>.value(<String, dynamic>{}),
-      ) as _i8.Future<Map<String, dynamic>>);
+            _i9.Future<Map<String, dynamic>>.value(<String, dynamic>{}),
+      ) as _i9.Future<Map<String, dynamic>>);
   @override
-  _i8.Future<_i5.FileData> retriveFile({
+  _i9.Future<_i5.FileData> retriveFile({
     required String? fileId,
     required String? apiKey,
   }) =>
@@ -410,7 +423,7 @@ class MockOpenIAService extends _i1.Mock implements _i7.OpenIAService {
             #apiKey: apiKey,
           },
         ),
-        returnValue: _i8.Future<_i5.FileData>.value(_FakeFileData_7(
+        returnValue: _i9.Future<_i5.FileData>.value(_FakeFileData_7(
           this,
           Invocation.method(
             #retriveFile,
@@ -421,9 +434,9 @@ class MockOpenIAService extends _i1.Mock implements _i7.OpenIAService {
             },
           ),
         )),
-      ) as _i8.Future<_i5.FileData>);
+      ) as _i9.Future<_i5.FileData>);
   @override
-  _i8.Future<_i6.File> retriveFileContent({
+  _i9.Future<_i6.File> retriveFileContent({
     required String? fileId,
     required String? apiKey,
   }) =>
@@ -436,7 +449,7 @@ class MockOpenIAService extends _i1.Mock implements _i7.OpenIAService {
             #apiKey: apiKey,
           },
         ),
-        returnValue: _i8.Future<_i6.File>.value(_FakeFile_8(
+        returnValue: _i9.Future<_i6.File>.value(_FakeFile_8(
           this,
           Invocation.method(
             #retriveFileContent,
@@ -447,5 +460,32 @@ class MockOpenIAService extends _i1.Mock implements _i7.OpenIAService {
             },
           ),
         )),
-      ) as _i8.Future<_i6.File>);
+      ) as _i9.Future<_i6.File>);
+  @override
+  _i9.Future<_i7.ModerationResponse> checkModeration({
+    required Map<String, dynamic>? input,
+    required String? apiKey,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #checkModeration,
+          [],
+          {
+            #input: input,
+            #apiKey: apiKey,
+          },
+        ),
+        returnValue:
+            _i9.Future<_i7.ModerationResponse>.value(_FakeModerationResponse_9(
+          this,
+          Invocation.method(
+            #checkModeration,
+            [],
+            {
+              #input: input,
+              #apiKey: apiKey,
+            },
+          ),
+        )),
+      ) as _i9.Future<_i7.ModerationResponse>);
 }

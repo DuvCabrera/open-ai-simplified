@@ -1,6 +1,6 @@
 name: open_ai_simplified
 description: OpenAI Simplified is an application that aims to provide easy and intuitive access to OpenAI services. 
-version: 0.0.5
+version: 0.0.6
 homepage: "https://github.com/DuvCabrera/open-ai-simplified"
 
 environment:
