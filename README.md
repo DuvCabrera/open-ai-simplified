@@ -98,6 +98,41 @@ void main() async {
 
   /// print the embeddings
   log(embedding.data[0].embedding.toString());
+
+  /// The file need to be an JsonL, another types of file will not work
+  /// Retrives the list of stored files as ListFileResponse object. you can have
+  /// the data as Map if use the method getRawFilesList
+  final list = await openAi.getFilesList();
+
+  /// print the list
+  log(list.data.toString());
+
+  /// Upload a file that contains document(s) to be used across various endpoints/features.
+  ///  Currently, the size of all the files uploaded by one organization can be up to 1 GB.
+  final uploadedFile = await openAi.uploadFile(
+      file: File('director/xxx.jsonl'), purpose: 'fine-tune');
+
+  /// print the uploadedFile
+  log(uploadedFile.toString());
+
+  /// Deletes a file and return informations about de file deleted
+  final deletedFile = await openAi.deleteFile(fileId: 'fileId');
+
+  /// print the information about the file deleted
+  log(deletedFile.toString());
+
+  /// Get the info about a file as a FileData object
+  /// you also can get the info as Map with the method retriveRawFileInfo
+  final fileInfo = await openAi.retriveFileInfo(fileId: 'fileId');
+
+  /// print the file info
+  log(fileInfo.toString());
+
+  /// Get the content of a specific file.
+  final fileContent = await openAi.retriveFileContent(fileId: 'fileId');
+
+  /// print the content
+  log(fileContent.toString());
 }
 
 Future<File> downloadFile(String url) async {
