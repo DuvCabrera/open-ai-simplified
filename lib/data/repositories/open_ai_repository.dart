@@ -3,6 +3,9 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:open_ai_simplified/data/remote/open_ia_service.dart';
 import 'package:open_ai_simplified/domain/exceptions.dart';
+import 'package:open_ai_simplified/domain/models/config_fine_tunes.dart';
+import 'package:open_ai_simplified/domain/models/fine_tunes_response.dart';
+import 'package:open_ai_simplified/domain/models/list_fine_tunes_response.dart';
 import 'package:open_ai_simplified/domain/models/models.dart';
 import 'package:open_ai_simplified/domain/models/moderation_response.dart';
 
@@ -34,6 +37,11 @@ class OpenIARepository {
   /// the method configEmbeddingFromMap or configEmbeddingFromConfig
   ConfigEmbedding _configEmbedding = ConfigEmbedding();
 
+  /// contains a ConfigFineTunes object that have the information necessary to configure the
+  /// service of getting fine-tunes, default values are setted but you can change it with
+  /// the method configFineTunesFromMap or configFineTunesFromConfig
+  ConfigFineTunes _configFineTunes = ConfigFineTunes();
+
   /// this is the service that makes tha API calls
   OpenIAService get service => _service;
   final OpenIAService _service;
@@ -41,6 +49,45 @@ class OpenIARepository {
   /// Add an APIKey to the package
   void addApiKey(String apiKey) {
     _apiKey = apiKey;
+  }
+
+  /// configure Fine-tunes service from map
+  void configFineTunesFromMap(Map<String, dynamic> newConfig) {
+    if (newConfig.isEmpty) {
+      throw InvalidParamsException(
+          message: 'newConfig should have data inside');
+    }
+    _configFineTunes = _configFineTunes.copyWith(
+        model: newConfig['model'] ?? _configFineTunes.model,
+        nEpochs: newConfig['n_epochs'] ?? _configFineTunes.nEpochs,
+        batchSize: newConfig['batch_size'] ?? _configFineTunes.batchSize,
+        learningRateMultiplier: newConfig['learning_rate_multiplier'] ??
+            _configFineTunes.learningRateMultiplier,
+        promptLossWeight: newConfig['prompt_loss_weight'] ??
+            _configFineTunes.promptLossWeight,
+        computeClassificationMetrics:
+            newConfig['compute_classification_metrics'] ??
+                _configFineTunes.computeClassificationMetrics,
+        classificationNClasses: newConfig['classification_n_classes'] ??
+            _configFineTunes.classificationNClasses,
+        classificationPositiveClass:
+            newConfig['classification_positive_class'] ??
+                _configFineTunes.classificationPositiveClass,
+        suffix: newConfig['suffix'] ?? _configFineTunes.suffix);
+  }
+
+  /// configure Fine-tunes service from map
+  void configFineTunesFromConfig(ConfigFineTunes newConfig) {
+    _configFineTunes = _configFineTunes.copyWith(
+        model: newConfig.model,
+        nEpochs: newConfig.nEpochs,
+        batchSize: newConfig.batchSize,
+        learningRateMultiplier: newConfig.learningRateMultiplier,
+        promptLossWeight: newConfig.promptLossWeight,
+        computeClassificationMetrics: newConfig.computeClassificationMetrics,
+        classificationNClasses: newConfig.classificationNClasses,
+        classificationPositiveClass: newConfig.classificationPositiveClass,
+        suffix: newConfig.suffix);
   }
 
   /// configure Embedding service from map
@@ -505,6 +552,143 @@ class OpenIARepository {
       final map = {'input': input};
       final result = await service.checkModeration(input: map, apiKey: _apiKey);
       return result.toMap();
+    } catch (e) {
+      throw _exceptionCheck(e);
+    }
+  }
+
+  /// Creates a job that fine-tunes a specified model from a given dataset. return a FineTunesResponse object
+  Future<FineTunesResponse> createFineTunes(
+      {required String trainingFile, String? validationFile}) async {
+    try {
+      final Map<String, dynamic> map;
+      if (validationFile != null) {
+        _checkApi(values: [trainingFile, validationFile]);
+        map = {
+          'training_file': trainingFile,
+          'validation_file': validationFile
+        };
+      } else {
+        _checkApi(values: [trainingFile]);
+        map = {
+          'training_file': trainingFile,
+        };
+      }
+      map.addAll(_configFineTunes.toMap());
+      final result =
+          await service.createFineTune(trainingParams: map, apiKey: _apiKey);
+      return result;
+    } catch (e) {
+      throw _exceptionCheck(e);
+    }
+  }
+
+  /// Creates a job that fine-tunes a specified model from a given dataset. return a Map
+  Future<Map<String, dynamic>> createRawFineTunes(
+      {required String trainingFile, String? validationFile}) async {
+    try {
+      final Map<String, dynamic> map;
+      if (validationFile != null) {
+        _checkApi(values: [trainingFile, validationFile]);
+        map = {
+          'training_file': trainingFile,
+          'validation_file': validationFile
+        };
+      } else {
+        _checkApi(values: [trainingFile]);
+        map = {
+          'training_file': trainingFile,
+        };
+      }
+      map.addAll(_configFineTunes.toMap());
+      final result =
+          await service.createFineTune(trainingParams: map, apiKey: _apiKey);
+      return result.toMap();
+    } catch (e) {
+      throw _exceptionCheck(e);
+    }
+  }
+
+  /// List your organization's fine-tuning jobs, return a ListFineTunesResponse object
+  Future<ListFineTunesResponse> getListFineTunes() async {
+    try {
+      _checkApi();
+      final result = await service.getListFineTunes(apiKey: _apiKey);
+      return result;
+    } catch (e) {
+      throw _exceptionCheck(e);
+    }
+  }
+
+  /// List your organization's fine-tuning jobs, return a Map
+  Future<Map<String, dynamic>> getRawListFineTunes() async {
+    try {
+      _checkApi();
+      final result = await service.getListFineTunes(apiKey: _apiKey);
+      return result.toMap();
+    } catch (e) {
+      throw _exceptionCheck(e);
+    }
+  }
+
+  /// Gets info about the fine-tune job. return a FineTunesResponse object
+  Future<FineTunesResponse> retriveFineTune(
+      {required String fineTuneId}) async {
+    try {
+      _checkApi(values: [fineTuneId]);
+      final result = await service.retriveFineTune(
+          fineTuneId: fineTuneId, apiKey: _apiKey);
+      return result;
+    } catch (e) {
+      throw _exceptionCheck(e);
+    }
+  }
+
+  /// Gets info about the fine-tune job. return a Map
+  Future<Map<String, dynamic>> retriveRawFineTune(
+      {required String fineTuneId}) async {
+    try {
+      _checkApi(values: [fineTuneId]);
+      final result = await service.retriveFineTune(
+          fineTuneId: fineTuneId, apiKey: _apiKey);
+      return result.toMap();
+    } catch (e) {
+      throw _exceptionCheck(e);
+    }
+  }
+
+  /// Immediately cancel a fine-tune job. return a FineTunesResponse object
+  Future<FineTunesResponse> cancelFineTune({required String fineTuneId}) async {
+    try {
+      _checkApi(values: [fineTuneId]);
+      final result =
+          await service.cancelFineTune(fineTuneId: fineTuneId, apiKey: _apiKey);
+      return result;
+    } catch (e) {
+      throw _exceptionCheck(e);
+    }
+  }
+
+  /// Immediately cancel a fine-tune job. return a Map
+  Future<Map<String, dynamic>> cancelRawFineTune(
+      {required String fineTuneId}) async {
+    try {
+      _checkApi(values: [fineTuneId]);
+      final result =
+          await service.cancelFineTune(fineTuneId: fineTuneId, apiKey: _apiKey);
+      return result.toMap();
+    } catch (e) {
+      throw _exceptionCheck(e);
+    }
+  }
+
+  /// Delete a fine-tuned model. You must have the Owner role in your organization. Return a Map
+  Future<Map<String, dynamic>> deleteFineTunelModel({required model}) async {
+    try {
+      _checkApi(values: [model]);
+      final result =
+          await service.deleteFineTunelModel(model: model, apiKey: _apiKey);
+      return result;
     } catch (e) {
       throw _exceptionCheck(e);
     }

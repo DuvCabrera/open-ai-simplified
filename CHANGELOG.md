@@ -1,3 +1,7 @@
+## 0.0.7
+
+* Added Fine-tuning feature
+
 ## 0.0.6
 
 * Added moderation feature

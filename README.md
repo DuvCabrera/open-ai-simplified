@@ -37,7 +37,7 @@ Edits       | ✅
 Images      | ✅
 Embeddings  | ✅
 Files       | ✅
-Fine-tunes  | ❌
+Fine-tunes  | ✅
 Moderations | ✅
 
 ## Getting started
