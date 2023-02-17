@@ -8,6 +8,7 @@ import 'package:open_ai_simplified/data/infraestructure/url_builder.dart';
 import 'package:open_ai_simplified/domain/models/embeddings_response.dart';
 import 'package:open_ai_simplified/domain/models/list_file_response.dart';
 import 'package:open_ai_simplified/domain/models/models.dart';
+import 'package:open_ai_simplified/domain/models/moderation_response.dart';
 import 'package:path_provider/path_provider.dart';
 
 class OpenIAService {
@@ -224,5 +225,18 @@ class OpenIAService {
     final file = File('$path/$fileId');
     await file.writeAsString(response.data);
     return file;
+  }
+
+  /// Classifies if text violates OpenAI's Content Policy, returns ModerationResponse object
+  Future<ModerationResponse> checkModeration(
+      {required Map<String, dynamic> input, required String apiKey}) async {
+    final response = await dio.post(UrlBuilder.moderationsPath,
+        data: input,
+        options: Options(headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $apiKey'
+        }));
+
+    return ModerationResponse.fromMap(response.data);
   }
 }
