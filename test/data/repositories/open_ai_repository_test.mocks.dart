@@ -4,18 +4,18 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i9;
-import 'dart:io' as _i6;
+import 'dart:io' as _i4;
 
 import 'package:dio/dio.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:open_ai_simplified/data/remote/open_ia_service.dart' as _i8;
-import 'package:open_ai_simplified/domain/models/embeddings_response.dart'
-    as _i4;
-import 'package:open_ai_simplified/domain/models/list_file_response.dart'
-    as _i5;
+import 'package:open_ai_simplified/domain/models/fine_tunes_response.dart'
+    as _i6;
+import 'package:open_ai_simplified/domain/models/list_fine_tunes_response.dart'
+    as _i7;
 import 'package:open_ai_simplified/domain/models/models.dart' as _i3;
 import 'package:open_ai_simplified/domain/models/moderation_response.dart'
-    as _i7;
+    as _i5;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -81,7 +81,7 @@ class _FakeImagesResponse_4 extends _i1.SmartFake
 }
 
 class _FakeEmbeddingsResponse_5 extends _i1.SmartFake
-    implements _i4.EmbeddingsResponse {
+    implements _i3.EmbeddingsResponse {
   _FakeEmbeddingsResponse_5(
     Object parent,
     Invocation parentInvocation,
@@ -92,7 +92,7 @@ class _FakeEmbeddingsResponse_5 extends _i1.SmartFake
 }
 
 class _FakeListFileResponse_6 extends _i1.SmartFake
-    implements _i5.ListFileResponse {
+    implements _i3.ListFileResponse {
   _FakeListFileResponse_6(
     Object parent,
     Invocation parentInvocation,
@@ -102,7 +102,7 @@ class _FakeListFileResponse_6 extends _i1.SmartFake
         );
 }
 
-class _FakeFileData_7 extends _i1.SmartFake implements _i5.FileData {
+class _FakeFileData_7 extends _i1.SmartFake implements _i3.FileData {
   _FakeFileData_7(
     Object parent,
     Invocation parentInvocation,
@@ -112,7 +112,7 @@ class _FakeFileData_7 extends _i1.SmartFake implements _i5.FileData {
         );
 }
 
-class _FakeFile_8 extends _i1.SmartFake implements _i6.File {
+class _FakeFile_8 extends _i1.SmartFake implements _i4.File {
   _FakeFile_8(
     Object parent,
     Invocation parentInvocation,
@@ -123,8 +123,30 @@ class _FakeFile_8 extends _i1.SmartFake implements _i6.File {
 }
 
 class _FakeModerationResponse_9 extends _i1.SmartFake
-    implements _i7.ModerationResponse {
+    implements _i5.ModerationResponse {
   _FakeModerationResponse_9(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeFineTunesResponse_10 extends _i1.SmartFake
+    implements _i6.FineTunesResponse {
+  _FakeFineTunesResponse_10(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeListFineTunesResponse_11 extends _i1.SmartFake
+    implements _i7.ListFineTunesResponse {
+  _FakeListFineTunesResponse_11(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -256,7 +278,7 @@ class MockOpenIAService extends _i1.Mock implements _i8.OpenIAService {
       ) as _i9.Future<_i3.ImagesResponse>);
   @override
   _i9.Future<_i3.ImagesResponse> variateImage({
-    required _i6.File? image,
+    required _i4.File? image,
     required String? apiKey,
     required _i3.ConfigImages? config,
   }) =>
@@ -286,8 +308,8 @@ class MockOpenIAService extends _i1.Mock implements _i8.OpenIAService {
   @override
   _i9.Future<_i3.ImagesResponse> editImage({
     required String? prompt,
-    required _i6.File? image,
-    _i6.File? mask,
+    required _i4.File? image,
+    _i4.File? mask,
     required String? apiKey,
     required _i3.ConfigImages? config,
   }) =>
@@ -319,7 +341,7 @@ class MockOpenIAService extends _i1.Mock implements _i8.OpenIAService {
         )),
       ) as _i9.Future<_i3.ImagesResponse>);
   @override
-  _i9.Future<_i4.EmbeddingsResponse> createEmbedding({
+  _i9.Future<_i3.EmbeddingsResponse> createEmbedding({
     required String? apiKey,
     required Map<String, dynamic>? promptWithModel,
   }) =>
@@ -333,7 +355,7 @@ class MockOpenIAService extends _i1.Mock implements _i8.OpenIAService {
           },
         ),
         returnValue:
-            _i9.Future<_i4.EmbeddingsResponse>.value(_FakeEmbeddingsResponse_5(
+            _i9.Future<_i3.EmbeddingsResponse>.value(_FakeEmbeddingsResponse_5(
           this,
           Invocation.method(
             #createEmbedding,
@@ -344,9 +366,9 @@ class MockOpenIAService extends _i1.Mock implements _i8.OpenIAService {
             },
           ),
         )),
-      ) as _i9.Future<_i4.EmbeddingsResponse>);
+      ) as _i9.Future<_i3.EmbeddingsResponse>);
   @override
-  _i9.Future<_i5.ListFileResponse> getFileList({required String? apiKey}) =>
+  _i9.Future<_i3.ListFileResponse> getFileList({required String? apiKey}) =>
       (super.noSuchMethod(
         Invocation.method(
           #getFileList,
@@ -354,7 +376,7 @@ class MockOpenIAService extends _i1.Mock implements _i8.OpenIAService {
           {#apiKey: apiKey},
         ),
         returnValue:
-            _i9.Future<_i5.ListFileResponse>.value(_FakeListFileResponse_6(
+            _i9.Future<_i3.ListFileResponse>.value(_FakeListFileResponse_6(
           this,
           Invocation.method(
             #getFileList,
@@ -362,11 +384,11 @@ class MockOpenIAService extends _i1.Mock implements _i8.OpenIAService {
             {#apiKey: apiKey},
           ),
         )),
-      ) as _i9.Future<_i5.ListFileResponse>);
+      ) as _i9.Future<_i3.ListFileResponse>);
   @override
-  _i9.Future<_i5.FileData> uploadFile({
+  _i9.Future<_i3.FileData> uploadFile({
     required String? apiKey,
-    required _i6.File? file,
+    required _i4.File? file,
     required String? purpose,
   }) =>
       (super.noSuchMethod(
@@ -379,7 +401,7 @@ class MockOpenIAService extends _i1.Mock implements _i8.OpenIAService {
             #purpose: purpose,
           },
         ),
-        returnValue: _i9.Future<_i5.FileData>.value(_FakeFileData_7(
+        returnValue: _i9.Future<_i3.FileData>.value(_FakeFileData_7(
           this,
           Invocation.method(
             #uploadFile,
@@ -391,7 +413,7 @@ class MockOpenIAService extends _i1.Mock implements _i8.OpenIAService {
             },
           ),
         )),
-      ) as _i9.Future<_i5.FileData>);
+      ) as _i9.Future<_i3.FileData>);
   @override
   _i9.Future<Map<String, dynamic>> deleteFile({
     required String? fileId,
@@ -410,7 +432,7 @@ class MockOpenIAService extends _i1.Mock implements _i8.OpenIAService {
             _i9.Future<Map<String, dynamic>>.value(<String, dynamic>{}),
       ) as _i9.Future<Map<String, dynamic>>);
   @override
-  _i9.Future<_i5.FileData> retriveFile({
+  _i9.Future<_i3.FileData> retriveFile({
     required String? fileId,
     required String? apiKey,
   }) =>
@@ -423,7 +445,7 @@ class MockOpenIAService extends _i1.Mock implements _i8.OpenIAService {
             #apiKey: apiKey,
           },
         ),
-        returnValue: _i9.Future<_i5.FileData>.value(_FakeFileData_7(
+        returnValue: _i9.Future<_i3.FileData>.value(_FakeFileData_7(
           this,
           Invocation.method(
             #retriveFile,
@@ -434,9 +456,9 @@ class MockOpenIAService extends _i1.Mock implements _i8.OpenIAService {
             },
           ),
         )),
-      ) as _i9.Future<_i5.FileData>);
+      ) as _i9.Future<_i3.FileData>);
   @override
-  _i9.Future<_i6.File> retriveFileContent({
+  _i9.Future<_i4.File> retriveFileContent({
     required String? fileId,
     required String? apiKey,
   }) =>
@@ -449,7 +471,7 @@ class MockOpenIAService extends _i1.Mock implements _i8.OpenIAService {
             #apiKey: apiKey,
           },
         ),
-        returnValue: _i9.Future<_i6.File>.value(_FakeFile_8(
+        returnValue: _i9.Future<_i4.File>.value(_FakeFile_8(
           this,
           Invocation.method(
             #retriveFileContent,
@@ -460,9 +482,9 @@ class MockOpenIAService extends _i1.Mock implements _i8.OpenIAService {
             },
           ),
         )),
-      ) as _i9.Future<_i6.File>);
+      ) as _i9.Future<_i4.File>);
   @override
-  _i9.Future<_i7.ModerationResponse> checkModeration({
+  _i9.Future<_i5.ModerationResponse> checkModeration({
     required Map<String, dynamic>? input,
     required String? apiKey,
   }) =>
@@ -476,7 +498,7 @@ class MockOpenIAService extends _i1.Mock implements _i8.OpenIAService {
           },
         ),
         returnValue:
-            _i9.Future<_i7.ModerationResponse>.value(_FakeModerationResponse_9(
+            _i9.Future<_i5.ModerationResponse>.value(_FakeModerationResponse_9(
           this,
           Invocation.method(
             #checkModeration,
@@ -487,5 +509,122 @@ class MockOpenIAService extends _i1.Mock implements _i8.OpenIAService {
             },
           ),
         )),
-      ) as _i9.Future<_i7.ModerationResponse>);
+      ) as _i9.Future<_i5.ModerationResponse>);
+  @override
+  _i9.Future<_i6.FineTunesResponse> createFineTune({
+    required Map<String, dynamic>? trainingParams,
+    required String? apiKey,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #createFineTune,
+          [],
+          {
+            #trainingParams: trainingParams,
+            #apiKey: apiKey,
+          },
+        ),
+        returnValue:
+            _i9.Future<_i6.FineTunesResponse>.value(_FakeFineTunesResponse_10(
+          this,
+          Invocation.method(
+            #createFineTune,
+            [],
+            {
+              #trainingParams: trainingParams,
+              #apiKey: apiKey,
+            },
+          ),
+        )),
+      ) as _i9.Future<_i6.FineTunesResponse>);
+  @override
+  _i9.Future<_i7.ListFineTunesResponse> getListFineTunes(
+          {required String? apiKey}) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getListFineTunes,
+          [],
+          {#apiKey: apiKey},
+        ),
+        returnValue: _i9.Future<_i7.ListFineTunesResponse>.value(
+            _FakeListFineTunesResponse_11(
+          this,
+          Invocation.method(
+            #getListFineTunes,
+            [],
+            {#apiKey: apiKey},
+          ),
+        )),
+      ) as _i9.Future<_i7.ListFineTunesResponse>);
+  @override
+  _i9.Future<_i6.FineTunesResponse> retriveFineTune({
+    required String? fineTuneId,
+    required String? apiKey,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #retriveFineTune,
+          [],
+          {
+            #fineTuneId: fineTuneId,
+            #apiKey: apiKey,
+          },
+        ),
+        returnValue:
+            _i9.Future<_i6.FineTunesResponse>.value(_FakeFineTunesResponse_10(
+          this,
+          Invocation.method(
+            #retriveFineTune,
+            [],
+            {
+              #fineTuneId: fineTuneId,
+              #apiKey: apiKey,
+            },
+          ),
+        )),
+      ) as _i9.Future<_i6.FineTunesResponse>);
+  @override
+  _i9.Future<_i6.FineTunesResponse> cancelFineTune({
+    required dynamic fineTuneId,
+    required String? apiKey,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #cancelFineTune,
+          [],
+          {
+            #fineTuneId: fineTuneId,
+            #apiKey: apiKey,
+          },
+        ),
+        returnValue:
+            _i9.Future<_i6.FineTunesResponse>.value(_FakeFineTunesResponse_10(
+          this,
+          Invocation.method(
+            #cancelFineTune,
+            [],
+            {
+              #fineTuneId: fineTuneId,
+              #apiKey: apiKey,
+            },
+          ),
+        )),
+      ) as _i9.Future<_i6.FineTunesResponse>);
+  @override
+  _i9.Future<Map<String, dynamic>> deleteFineTunelModel({
+    required String? model,
+    required String? apiKey,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #deleteFineTunelModel,
+          [],
+          {
+            #model: model,
+            #apiKey: apiKey,
+          },
+        ),
+        returnValue:
+            _i9.Future<Map<String, dynamic>>.value(<String, dynamic>{}),
+      ) as _i9.Future<Map<String, dynamic>>);
 }

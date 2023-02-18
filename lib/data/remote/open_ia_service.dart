@@ -5,6 +5,8 @@ import 'package:dio/dio.dart';
 import 'package:http_parser/http_parser.dart';
 
 import 'package:open_ai_simplified/data/infraestructure/url_builder.dart';
+import 'package:open_ai_simplified/domain/models/fine_tunes_response.dart';
+import 'package:open_ai_simplified/domain/models/list_fine_tunes_response.dart';
 import 'package:open_ai_simplified/domain/models/models.dart';
 import 'package:open_ai_simplified/domain/models/moderation_response.dart';
 import 'package:path_provider/path_provider.dart';
@@ -236,5 +238,66 @@ class OpenIAService {
         }));
 
     return ModerationResponse.fromMap(response.data);
+  }
+
+  /// Creates a job that fine-tunes a specified model from a given dataset.
+  /// Response includes details of the enqueued job including job status and the name of the fine-tuned models once complete.
+  Future<FineTunesResponse> createFineTune(
+      {required Map<String, dynamic> trainingParams,
+      required String apiKey}) async {
+    final response = await dio.post(UrlBuilder.fineTunesPath,
+        data: trainingParams,
+        options: Options(headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $apiKey'
+        }));
+    return FineTunesResponse.fromMap(response.data);
+  }
+
+  /// List your organization's fine-tuning jobs
+  Future<ListFineTunesResponse> getListFineTunes(
+      {required String apiKey}) async {
+    final response = await dio.get(UrlBuilder.fineTunesPath,
+        options: Options(headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $apiKey'
+        }));
+    return ListFineTunesResponse.fromMap(response.data);
+  }
+
+  /// Gets info about the fine-tune job.
+  Future<FineTunesResponse> retriveFineTune(
+      {required String fineTuneId, required String apiKey}) async {
+    final response = await dio.get(UrlBuilder.fineTunesPathWithId(fineTuneId),
+        options: Options(headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $apiKey'
+        }));
+
+    return FineTunesResponse.fromMap(response.data);
+  }
+
+  /// Immediately cancel a fine-tune job.
+  Future<FineTunesResponse> cancelFineTune(
+      {required fineTuneId, required String apiKey}) async {
+    final response = await dio.post(
+        UrlBuilder.fineTunesPathWithIdNCancel(fineTuneId),
+        options: Options(headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $apiKey'
+        }));
+    return FineTunesResponse.fromMap(response.data);
+  }
+
+  /// Delete a fine-tuned model. You must have the Owner role in your organization.
+  Future<Map<String, dynamic>> deleteFineTunelModel(
+      {required String model, required String apiKey}) async {
+    final response = await dio.delete(
+        UrlBuilder.fineTunesDeletePathWithIdModel(model),
+        options: Options(headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $apiKey'
+        }));
+    return response.data;
   }
 }
