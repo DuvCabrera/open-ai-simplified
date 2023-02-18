@@ -1,3 +1,7 @@
+## 0.0.8
+
+* modified license
+
 ## 0.0.7
 
 * Added Fine-tuning feature
