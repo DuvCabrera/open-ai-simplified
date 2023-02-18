@@ -3,6 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:open_ai_simplified/data/remote/open_ia_service.dart';
+import 'package:open_ai_simplified/domain/models/fine_tunes_response.dart';
+import 'package:open_ai_simplified/domain/models/list_fine_tunes_response.dart';
 import 'package:open_ai_simplified/domain/models/models.dart';
 import 'package:open_ai_simplified/domain/models/moderation_response.dart';
 
@@ -21,9 +23,13 @@ void main() {
   late Map<String, dynamic> mockFileListResponse;
   late Map<String, dynamic> mockFileDataResponse;
   late Map<String, dynamic> mockModerationResponse;
+  late Map<String, dynamic> mockFineTunesResponse;
+  late Map<String, dynamic> mockListFineTunesResponse;
 
   setUp(() => sut = OpenIAService(dio));
   setUpAll(() {
+    mockListFineTunesResponse = Mocks.mockListFineTunesResponse;
+    mockFineTunesResponse = Mocks.mockFineTunesResponse;
     mockModerationResponse = Mocks.mockModerationResponse;
     mockFileDataResponse = Mocks.mockFileDataResponse;
     mockFileListResponse = Mocks.mockListFileResponse;
@@ -150,6 +156,65 @@ void main() {
     expect(response, isA<ModerationResponse>());
     verify(dio.post(any, options: anyNamed('options'), data: anyNamed('data')))
         .called(1);
+    verifyNoMoreInteractions(dio);
+  });
+
+  test('createFineTune should return a FineTuneResponse object', () async {
+    when(dio.post(any, data: anyNamed('data'), options: anyNamed('options')))
+        .thenAnswer((realInvocation) async => Response(
+            requestOptions: RequestOptions(path: ''),
+            data: mockFineTunesResponse));
+    final response =
+        await sut.createFineTune(trainingParams: {}, apiKey: 'apiKey');
+    expect(response, isA<FineTunesResponse>());
+    verify(dio.post(any, data: anyNamed('data'), options: anyNamed('options')))
+        .called(1);
+    verifyNoMoreInteractions(dio);
+  });
+
+  test('getListFineTunes should return ListFineTunesResponse object', () async {
+    when(dio.get(any, options: anyNamed('options'))).thenAnswer(
+        (realInvocation) async => Response(
+            requestOptions: RequestOptions(path: ''),
+            data: mockListFineTunesResponse));
+    final response = await sut.getListFineTunes(apiKey: 'apiKey');
+    expect(response, isA<ListFineTunesResponse>());
+    verify(dio.get(any, options: anyNamed('options'))).called(1);
+    verifyNoMoreInteractions(dio);
+  });
+
+  test('retriveFineTune should return a FineTuneResponse object', () async {
+    when(dio.get(any, options: anyNamed('options'))).thenAnswer(
+        (realInvocation) async => Response(
+            requestOptions: RequestOptions(path: ''),
+            data: mockFineTunesResponse));
+    final response =
+        await sut.retriveFineTune(fineTuneId: '', apiKey: 'apiKey');
+    expect(response, isA<FineTunesResponse>());
+    verify(dio.get(any, options: anyNamed('options'))).called(1);
+    verifyNoMoreInteractions(dio);
+  });
+
+  test('cancelFineTune should return a FineTuneResponse object', () async {
+    when(dio.post(any, options: anyNamed('options'))).thenAnswer(
+        (realInvocation) async => Response(
+            requestOptions: RequestOptions(path: ''),
+            data: mockFineTunesResponse));
+    final response = await sut.cancelFineTune(fineTuneId: '', apiKey: 'apiKey');
+    expect(response, isA<FineTunesResponse>());
+    verify(dio.post(any, options: anyNamed('options'))).called(1);
+    verifyNoMoreInteractions(dio);
+  });
+
+  test('deleteFineTunelModel should return a Map ', () async {
+    when(dio.delete(any, options: anyNamed('options'))).thenAnswer(
+        (realInvocation) async => Response(
+            requestOptions: RequestOptions(path: ''),
+            data: mockFineTunesResponse));
+    final response =
+        await sut.deleteFineTunelModel(model: '', apiKey: 'apiKey');
+    expect(response, isA<Map>());
+    verify(dio.delete(any, options: anyNamed('options'))).called(1);
     verifyNoMoreInteractions(dio);
   });
 }

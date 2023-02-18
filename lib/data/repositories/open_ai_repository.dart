@@ -558,6 +558,7 @@ class OpenIARepository {
   }
 
   /// Creates a job that fine-tunes a specified model from a given dataset. return a FineTunesResponse object
+  /// The ID of an uploaded file that contains training data.
   Future<FineTunesResponse> createFineTunes(
       {required String trainingFile, String? validationFile}) async {
     try {
@@ -584,6 +585,7 @@ class OpenIARepository {
   }
 
   /// Creates a job that fine-tunes a specified model from a given dataset. return a Map
+  /// The ID of an uploaded file that contains training data.
   Future<Map<String, dynamic>> createRawFineTunes(
       {required String trainingFile, String? validationFile}) async {
     try {

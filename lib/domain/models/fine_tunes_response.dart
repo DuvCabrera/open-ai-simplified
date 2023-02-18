@@ -53,7 +53,7 @@ class FineTunesResponse {
       map['model'] as String,
       map['created_at'] as int,
       List<Events?>.from(
-        (map['events'] as List<int>).map<Events?>(
+        (map['events'] as List<dynamic>).map<Events?>(
           (x) => Events.fromMap(x as Map<String, dynamic>),
         ),
       ),
@@ -79,7 +79,7 @@ class TrainingFiles {
   final String id;
   final String object;
   final int bytes;
-  final String createdAt;
+  final int createdAt;
   final String filename;
   final String purpose;
 
@@ -102,7 +102,7 @@ class TrainingFiles {
       map['id'] as String,
       map['object'] as String,
       map['bytes'] as int,
-      map['created_at'] as String,
+      map['created_at'] as int,
       map['filename'] as String,
       map['purpose'] as String,
     );
