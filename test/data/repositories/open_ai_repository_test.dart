@@ -4,6 +4,8 @@ import 'package:mockito/mockito.dart';
 import 'package:open_ai_simplified/data/remote/open_ia_service.dart';
 import 'package:open_ai_simplified/data/repositories/open_ai_repository.dart';
 import 'package:open_ai_simplified/domain/exceptions.dart';
+import 'package:open_ai_simplified/domain/models/fine_tunes_response.dart';
+import 'package:open_ai_simplified/domain/models/list_fine_tunes_response.dart';
 import 'package:open_ai_simplified/domain/models/models.dart';
 import 'package:open_ai_simplified/domain/models/moderation_response.dart';
 
@@ -22,8 +24,12 @@ void main() {
   late Map<String, dynamic> mockFileListResponse;
   late Map<String, dynamic> mockFileDataResponse;
   late Map<String, dynamic> mockModerationResponse;
+  late Map<String, dynamic> mockFineTunesResponse;
+  late Map<String, dynamic> mockListFineTunesResponse;
 
   setUpAll(() {
+    mockListFineTunesResponse = Mocks.mockListFineTunesResponse;
+    mockFineTunesResponse = Mocks.mockFineTunesResponse;
     mockModerationResponse = Mocks.mockModerationResponse;
     mockFileDataResponse = Mocks.mockFileDataResponse;
     mockFileListResponse = Mocks.mockListFileResponse;
@@ -623,6 +629,339 @@ void main() {
             ModerationResponse.fromMap(mockModerationResponse));
 
     final result = sut.moderationCheck(input: '');
+    expect(result, throwsA(isA<InvalidParamsException>()));
+    verifyNoMoreInteractions(openIAService);
+  });
+
+  test('createFineTunes should return a FineTunesResponse object', () async {
+    when(openIAService.createFineTune(
+            trainingParams: anyNamed('trainingParams'),
+            apiKey: anyNamed('apiKey')))
+        .thenAnswer((realInvocation) async =>
+            FineTunesResponse.fromMap(mockFineTunesResponse));
+    final result = await sut.createFineTunes(trainingFile: 'input');
+    expect(result, isA<FineTunesResponse>());
+    verify(openIAService.createFineTune(
+            trainingParams: anyNamed('trainingParams'),
+            apiKey: anyNamed('apiKey')))
+        .called(1);
+    verifyNoMoreInteractions(openIAService);
+  });
+
+  test(
+      'createFineTunes should throw a KeyNotFoundException when the apiKey is empty or is not provided ',
+      () async {
+    when(openIAService.createFineTune(
+            trainingParams: anyNamed('trainingParams'),
+            apiKey: anyNamed('apiKey')))
+        .thenAnswer((realInvocation) async =>
+            FineTunesResponse.fromMap(mockFineTunesResponse));
+    sut.addApiKey('');
+    final result = sut.createFineTunes(trainingFile: 'input');
+    expect(result, throwsA(isA<KeyNotFoundException>()));
+    verifyNoMoreInteractions(openIAService);
+  });
+
+  test(
+      'createFineTunes should throw a InvalidParamsException when input is empty ',
+      () async {
+    when(openIAService.createFineTune(
+            trainingParams: anyNamed('trainingParams'),
+            apiKey: anyNamed('apiKey')))
+        .thenAnswer((realInvocation) async =>
+            FineTunesResponse.fromMap(mockFineTunesResponse));
+
+    final result = sut.createFineTunes(trainingFile: '');
+
+    expect(result, throwsA(isA<InvalidParamsException>()));
+    verifyNoMoreInteractions(openIAService);
+  });
+
+  test('createRawFineTunes should return a Map', () async {
+    when(openIAService.createFineTune(
+            trainingParams: anyNamed('trainingParams'),
+            apiKey: anyNamed('apiKey')))
+        .thenAnswer((realInvocation) async =>
+            FineTunesResponse.fromMap(mockFineTunesResponse));
+    final result = await sut.createRawFineTunes(trainingFile: 'input');
+    expect(result, isA<Map>());
+    verify(openIAService.createFineTune(
+            trainingParams: anyNamed('trainingParams'),
+            apiKey: anyNamed('apiKey')))
+        .called(1);
+    verifyNoMoreInteractions(openIAService);
+  });
+
+  test(
+      'createRawFineTunes should throw a KeyNotFoundException when the apiKey is empty or is not provided ',
+      () async {
+    when(openIAService.createFineTune(
+            trainingParams: anyNamed('trainingParams'),
+            apiKey: anyNamed('apiKey')))
+        .thenAnswer((realInvocation) async =>
+            FineTunesResponse.fromMap(mockFineTunesResponse));
+    sut.addApiKey('');
+    final result = sut.createRawFineTunes(trainingFile: 'input');
+    expect(result, throwsA(isA<KeyNotFoundException>()));
+    verifyNoMoreInteractions(openIAService);
+  });
+
+  test(
+      'createRawFineTunes should throw a InvalidParamsException when input is empty ',
+      () async {
+    when(openIAService.createFineTune(
+            trainingParams: anyNamed('trainingParams'),
+            apiKey: anyNamed('apiKey')))
+        .thenAnswer((realInvocation) async =>
+            FineTunesResponse.fromMap(mockFineTunesResponse));
+
+    final result = sut.createRawFineTunes(trainingFile: '');
+
+    expect(result, throwsA(isA<InvalidParamsException>()));
+    verifyNoMoreInteractions(openIAService);
+  });
+
+  test('getRawListFineTunes should return a Map', () async {
+    when(openIAService.getListFineTunes(apiKey: anyNamed('apiKey'))).thenAnswer(
+        (realInvocation) async =>
+            ListFineTunesResponse.fromMap(mockListFineTunesResponse));
+    final result = await sut.getRawListFineTunes();
+    expect(result, isA<Map>());
+    verify(openIAService.getListFineTunes(apiKey: anyNamed('apiKey')))
+        .called(1);
+    verifyNoMoreInteractions(openIAService);
+  });
+
+  test(
+      'getRawListFineTunes should throw a KeyNotFoundException when the apiKey is empty or is not provided ',
+      () async {
+    when(openIAService.getListFineTunes(apiKey: anyNamed('apiKey'))).thenAnswer(
+        (realInvocation) async =>
+            ListFineTunesResponse.fromMap(mockListFineTunesResponse));
+
+    sut.addApiKey('');
+    final result = sut.getRawListFineTunes();
+    expect(result, throwsA(isA<KeyNotFoundException>()));
+    verifyNoMoreInteractions(openIAService);
+  });
+
+  test('getListFineTunes should return a ListFineTunesResponse', () async {
+    when(openIAService.getListFineTunes(apiKey: anyNamed('apiKey'))).thenAnswer(
+        (realInvocation) async =>
+            ListFineTunesResponse.fromMap(mockListFineTunesResponse));
+    final result = await sut.getListFineTunes();
+    expect(result, isA<ListFineTunesResponse>());
+    verify(openIAService.getListFineTunes(apiKey: anyNamed('apiKey')))
+        .called(1);
+    verifyNoMoreInteractions(openIAService);
+  });
+
+  test(
+      'getListFineTunes should throw a KeyNotFoundException when the apiKey is empty or is not provided ',
+      () async {
+    when(openIAService.getListFineTunes(apiKey: anyNamed('apiKey'))).thenAnswer(
+        (realInvocation) async =>
+            ListFineTunesResponse.fromMap(mockListFineTunesResponse));
+
+    sut.addApiKey('');
+    final result = sut.getListFineTunes();
+    expect(result, throwsA(isA<KeyNotFoundException>()));
+    verifyNoMoreInteractions(openIAService);
+  });
+
+  test('retriveRawFineTune should return a Map', () async {
+    when(openIAService.retriveFineTune(
+            fineTuneId: anyNamed('fineTuneId'), apiKey: anyNamed('apiKey')))
+        .thenAnswer((realInvocation) async =>
+            FineTunesResponse.fromMap(mockFineTunesResponse));
+    final result = await sut.retriveRawFineTune(fineTuneId: 'input');
+    expect(result, isA<Map>());
+    verify(openIAService.retriveFineTune(
+            fineTuneId: anyNamed('fineTuneId'), apiKey: anyNamed('apiKey')))
+        .called(1);
+    verifyNoMoreInteractions(openIAService);
+  });
+
+  test(
+      'retriveRawFineTune should throw a KeyNotFoundException when the apiKey is empty or is not provided ',
+      () async {
+    when(openIAService.retriveFineTune(
+            fineTuneId: anyNamed('fineTuneId'), apiKey: anyNamed('apiKey')))
+        .thenAnswer((realInvocation) async =>
+            FineTunesResponse.fromMap(mockFineTunesResponse));
+    sut.addApiKey('');
+    final result = sut.retriveRawFineTune(fineTuneId: 'input');
+    expect(result, throwsA(isA<KeyNotFoundException>()));
+    verifyNoMoreInteractions(openIAService);
+  });
+
+  test(
+      'retriveRawFineTune should throw a InvalidParamsException when input is empty ',
+      () async {
+    when(openIAService.retriveFineTune(
+            fineTuneId: anyNamed('fineTuneId'), apiKey: anyNamed('apiKey')))
+        .thenAnswer((realInvocation) async =>
+            FineTunesResponse.fromMap(mockFineTunesResponse));
+
+    final result = sut.retriveRawFineTune(fineTuneId: '');
+
+    expect(result, throwsA(isA<InvalidParamsException>()));
+    verifyNoMoreInteractions(openIAService);
+  });
+
+  test('retriveFineTune should return a FineTunesResponse object', () async {
+    when(openIAService.retriveFineTune(
+            fineTuneId: anyNamed('fineTuneId'), apiKey: anyNamed('apiKey')))
+        .thenAnswer((realInvocation) async =>
+            FineTunesResponse.fromMap(mockFineTunesResponse));
+    final result = await sut.retriveFineTune(fineTuneId: 'input');
+    expect(result, isA<FineTunesResponse>());
+    verify(openIAService.retriveFineTune(
+            fineTuneId: anyNamed('fineTuneId'), apiKey: anyNamed('apiKey')))
+        .called(1);
+    verifyNoMoreInteractions(openIAService);
+  });
+
+  test(
+      'retriveFineTune should throw a KeyNotFoundException when the apiKey is empty or is not provided ',
+      () async {
+    when(openIAService.retriveFineTune(
+            fineTuneId: anyNamed('fineTuneId'), apiKey: anyNamed('apiKey')))
+        .thenAnswer((realInvocation) async =>
+            FineTunesResponse.fromMap(mockFineTunesResponse));
+    sut.addApiKey('');
+    final result = sut.retriveFineTune(fineTuneId: 'input');
+    expect(result, throwsA(isA<KeyNotFoundException>()));
+    verifyNoMoreInteractions(openIAService);
+  });
+
+  test(
+      'retriveFineTune should throw a InvalidParamsException when input is empty ',
+      () async {
+    when(openIAService.retriveFineTune(
+            fineTuneId: anyNamed('fineTuneId'), apiKey: anyNamed('apiKey')))
+        .thenAnswer((realInvocation) async =>
+            FineTunesResponse.fromMap(mockFineTunesResponse));
+
+    final result = sut.retriveFineTune(fineTuneId: '');
+
+    expect(result, throwsA(isA<InvalidParamsException>()));
+    verifyNoMoreInteractions(openIAService);
+  });
+
+  test('cancelFineTune should return a FineTunesResponse object', () async {
+    when(openIAService.cancelFineTune(
+            fineTuneId: anyNamed('fineTuneId'), apiKey: anyNamed('apiKey')))
+        .thenAnswer((realInvocation) async =>
+            FineTunesResponse.fromMap(mockFineTunesResponse));
+    final result = await sut.cancelFineTune(fineTuneId: 'input');
+    expect(result, isA<FineTunesResponse>());
+    verify(openIAService.cancelFineTune(
+            fineTuneId: anyNamed('fineTuneId'), apiKey: anyNamed('apiKey')))
+        .called(1);
+    verifyNoMoreInteractions(openIAService);
+  });
+
+  test(
+      'cancelFineTune should throw a KeyNotFoundException when the apiKey is empty or is not provided ',
+      () async {
+    when(openIAService.cancelFineTune(
+            fineTuneId: anyNamed('fineTuneId'), apiKey: anyNamed('apiKey')))
+        .thenAnswer((realInvocation) async =>
+            FineTunesResponse.fromMap(mockFineTunesResponse));
+    sut.addApiKey('');
+    final result = sut.cancelFineTune(fineTuneId: 'input');
+    expect(result, throwsA(isA<KeyNotFoundException>()));
+    verifyNoMoreInteractions(openIAService);
+  });
+
+  test(
+      'cancelFineTune should throw a InvalidParamsException when input is empty ',
+      () async {
+    when(openIAService.cancelFineTune(
+            fineTuneId: anyNamed('fineTuneId'), apiKey: anyNamed('apiKey')))
+        .thenAnswer((realInvocation) async =>
+            FineTunesResponse.fromMap(mockFineTunesResponse));
+
+    final result = sut.cancelFineTune(fineTuneId: '');
+
+    expect(result, throwsA(isA<InvalidParamsException>()));
+    verifyNoMoreInteractions(openIAService);
+  });
+
+  test('cancelRawFineTune should return a Map ', () async {
+    when(openIAService.cancelFineTune(
+            fineTuneId: anyNamed('fineTuneId'), apiKey: anyNamed('apiKey')))
+        .thenAnswer((realInvocation) async =>
+            FineTunesResponse.fromMap(mockFineTunesResponse));
+    final result = await sut.cancelRawFineTune(fineTuneId: 'input');
+    expect(result, isA<Map>());
+    verify(openIAService.cancelFineTune(
+            fineTuneId: anyNamed('fineTuneId'), apiKey: anyNamed('apiKey')))
+        .called(1);
+    verifyNoMoreInteractions(openIAService);
+  });
+
+  test(
+      'cancelRawFineTune should throw a KeyNotFoundException when the apiKey is empty or is not provided ',
+      () async {
+    when(openIAService.cancelFineTune(
+            fineTuneId: anyNamed('fineTuneId'), apiKey: anyNamed('apiKey')))
+        .thenAnswer((realInvocation) async =>
+            FineTunesResponse.fromMap(mockFineTunesResponse));
+    sut.addApiKey('');
+    final result = sut.cancelRawFineTune(fineTuneId: 'input');
+    expect(result, throwsA(isA<KeyNotFoundException>()));
+    verifyNoMoreInteractions(openIAService);
+  });
+
+  test(
+      'cancelRawFineTune should throw a InvalidParamsException when input is empty ',
+      () async {
+    when(openIAService.cancelFineTune(
+            fineTuneId: anyNamed('fineTuneId'), apiKey: anyNamed('apiKey')))
+        .thenAnswer((realInvocation) async =>
+            FineTunesResponse.fromMap(mockFineTunesResponse));
+
+    final result = sut.cancelRawFineTune(fineTuneId: '');
+
+    expect(result, throwsA(isA<InvalidParamsException>()));
+    verifyNoMoreInteractions(openIAService);
+  });
+
+  test('deleteFineTunelModel should return a Map ', () async {
+    when(openIAService.deleteFineTunelModel(
+            model: anyNamed('model'), apiKey: anyNamed('apiKey')))
+        .thenAnswer((realInvocation) async => mockFineTunesResponse);
+    final result = await sut.deleteFineTunelModel(model: 'input');
+    expect(result, isA<Map>());
+    verify(openIAService.deleteFineTunelModel(
+            model: anyNamed('model'), apiKey: anyNamed('apiKey')))
+        .called(1);
+    verifyNoMoreInteractions(openIAService);
+  });
+
+  test(
+      'deleteFineTunelModel should throw a KeyNotFoundException when the apiKey is empty or is not provided ',
+      () async {
+    when(openIAService.deleteFineTunelModel(
+            model: anyNamed('model'), apiKey: anyNamed('apiKey')))
+        .thenAnswer((realInvocation) async => mockFineTunesResponse);
+    sut.addApiKey('');
+    final result = sut.deleteFineTunelModel(model: 'input');
+    expect(result, throwsA(isA<KeyNotFoundException>()));
+    verifyNoMoreInteractions(openIAService);
+  });
+
+  test(
+      'deleteFineTunelModel should throw a InvalidParamsException when input is empty ',
+      () async {
+    when(openIAService.deleteFineTunelModel(
+            model: anyNamed('model'), apiKey: anyNamed('apiKey')))
+        .thenAnswer((realInvocation) async => mockFineTunesResponse);
+
+    final result = sut.deleteFineTunelModel(model: '');
+
     expect(result, throwsA(isA<InvalidParamsException>()));
     verifyNoMoreInteractions(openIAService);
   });

@@ -84,6 +84,11 @@ void main() async {
 
   /// Upload a file that contains document(s) to be used across various endpoints/features.
   ///  Currently, the size of all the files uploaded by one organization can be up to 1 GB.
+  /// the model to updated file, its need to be a JsonL, a json that contains a json with prompt and conpletion map in every line
+  /// {"prompt": "<prompt text>", "completion": "<ideal generated text>"}
+  /// {"prompt": "<prompt text>", "completion": "<ideal generated text>"}
+  /// {"prompt": "<prompt text>", "completion": "<ideal generated text>"}
+
   final uploadedFile = await openAi.uploadFile(
       file: File('director/xxx.jsonl'), purpose: 'fine-tune');
 
@@ -115,6 +120,43 @@ void main() async {
 
   /// print moderation info
   log(moderationInfo.results[0].categories.toString());
+
+  /// Creates a job that fine-tunes a specified model from a given dataset. return a FineTunesResponse object
+  /// The ID of an uploaded file that contains training data. you also can get the Map with the method createRawFineTunes
+  final fineTunesCreated =
+      await openAi.createFineTunes(trainingFile: 'ID of an uploaded file');
+
+  /// print fineTune created info
+  log(fineTunesCreated.toString());
+
+  /// List your organization's fine-tuning jobs, return a ListFineTunesResponse object
+  ///  you also can get the Map with the method getRawListFineTunes
+  final listFineTunes = await openAi.getListFineTunes();
+
+  /// print fineTune list info
+  log(listFineTunes.data[0].toString());
+
+  /// Gets info about the fine-tune job. return a FineTunesResponse object
+  ///  you also can get the Map with the method retriveRawFineTune
+  final retrivedFileTune =
+      await openAi.retriveFineTune(fineTuneId: 'ID of an uploaded file');
+
+  /// print fineTune  info
+  log(retrivedFileTune.toString());
+
+  /// Immediately cancel a fine-tune job. return a FineTunesResponse object
+  ///  you also can get the Map with the method cancelRawFineTune
+  final canceledFineTune =
+      await openAi.cancelFineTune(fineTuneId: 'fineTuneId');
+
+  /// print fineTune canceled info
+  log(canceledFineTune.toString());
+
+  /// Delete a fine-tuned model. You must have the Owner role in your organization. Return a Map
+  final deletedFineTune = await openAi.deleteFineTunelModel(model: 'model');
+
+  /// print fineTune deleted info
+  log(deletedFineTune.toString());
 }
 
 Future<File> downloadFile(String url) async {
